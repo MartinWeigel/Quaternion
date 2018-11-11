@@ -38,6 +38,11 @@ void Quaternion_set(double w, double v1, double v2, double v3, Quaternion* outpu
 void Quaternion_setIdentity(Quaternion* q);
 
 /**
+ * Copies one quaternion to another.
+ */
+void Quaternion_copy(Quaternion* q, Quaternion* output);
+
+/**
  * Tests if all quaternion values are equal (using QUATERNION_EPS).
  */
 bool Quaternion_equal(Quaternion* q1, Quaternion* q2);
@@ -107,10 +112,17 @@ void Quaternion_multiply(Quaternion* q1, Quaternion* q2, Quaternion* output);
  */
 void Quaternion_rotate(Quaternion* q, double v[3], double output[3]);
 
+/**
+ * Interpolates between two quaternions.
+ * @t
+ *      Interpolation between the two quaternions [0, 1].
+ *      0 is equal with q1, 1 is equal with q2, 0.5 is the middle between q1 and q2.
+ */
+void Quaternion_slerp(Quaternion* q1, Quaternion* q2, double t, Quaternion* output);
+
 
 // TODO: The following functions are planned, but not yet implemented
+// double Quaternion_fromEulerZYX(Quaternion* q);
 // double Quaternion_getZA(Quaternion* q);
 // double Quaternion_getYA(Quaternion* q);
 // double Quaternion_getXA(Quaternion* q);
-
-// void Quaternion_slerp(Quaternion* q1, Quaternion* q2, double interpolation, Quaternion* output);

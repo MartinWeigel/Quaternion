@@ -34,6 +34,11 @@ void Quaternion_setIdentity(Quaternion* q)
     Quaternion_set(1, 0, 0, 0, q);
 }
 
+void Quaternion_copy(Quaternion* q, Quaternion* output)
+{
+    Quaternion_set(q->w, q->v[0], q->v[1], q->v[2], output);
+}
+
 bool Quaternion_equal(Quaternion* q1, Quaternion* q2)
 {
     bool equalW  = fabs(q1->w - q2->w) <= QUATERNION_EPS;
@@ -163,4 +168,35 @@ void Quaternion_rotate(Quaternion* q, double v[3], double output[3])
     output[2] = 2*xz*v[0] + 2*yz*v[1] + zz*v[2] -
                 2*wy*v[0] - yy*v[2] + 2*wx*v[1] -
                 xx*v[2] + ww*v[2];
+}
+
+void Quaternion_slerp(Quaternion* q1, Quaternion* q2, double t, Quaternion* output)
+{
+    // Based on http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/slerp/index.htm
+    double cosHalfTheta = q1->w*q2->w + q1->v[0]*q2->v[0] + q1->v[1]*q2->v[1] + q1->v[2]*q2->v[2];
+
+    // if q1=q2 or qa=-q2 then theta = 0 and we can return qa
+    if (abs(cosHalfTheta) >= 1.0) {
+        Quaternion_copy(q1, output);
+        return;
+    }
+
+    double halfTheta = acos(cosHalfTheta);
+    double sinHalfTheta = sqrt(1.0 - cosHalfTheta*cosHalfTheta);
+    // If theta = 180 degrees then result is not fully defined
+    // We could rotate around any axis normal to q1 or q2
+    if (fabs(sinHalfTheta) < QUATERNION_EPS) {
+        output->w = (q1->w * 0.5 + q2->w * 0.5);
+        output->v[0] = (q1->v[0] * 0.5 + q2->v[0] * 0.5);
+        output->v[1] = (q1->v[1] * 0.5 + q2->v[1] * 0.5);
+        output->v[2] = (q1->v[2] * 0.5 + q2->v[2] * 0.5);
+    }
+
+    // Calculate Quaternion
+    double ratioA = sin((1 - t) * halfTheta) / sinHalfTheta;
+    double ratioB = sin(t * halfTheta) / sinHalfTheta; 
+    output->w = (q1->w * ratioA + q2->w * ratioB);
+    output->v[0] = (q1->v[0] * ratioA + q2->v[0] * ratioB);
+    output->v[1] = (q1->v[1] * ratioA + q2->v[1] * ratioB);
+    output->v[2] = (q1->v[2] * ratioA + q2->v[2] * ratioB);
 }

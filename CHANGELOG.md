@@ -4,6 +4,7 @@
 ### Added
 - `Quaternion_set()` to set quaternion values
 - `Quaternion_setIdentity()` to set the identity quaternion
+- `Quaternion_copy()` to copy a quaternion
 - `Quaternion_equal()` to check if two quaternions are equal
 - `Quaternion_conjugate()` to create the conjugate of a quaternion 
 - `Quaternion_norm()` to calculate the norm of a quaternion
@@ -14,3 +15,4 @@
 - `Quaternion_toAxisAngle()` to calculate the rotation axis and angle from a quaternion
 - `Quaternion_multiply()` to multiply two quaternions
 - `Quaternion_rotate()` to rotate a vector using a quaternion
+- `Quaternion_slerp()` to interpolate between two quaternions

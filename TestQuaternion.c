@@ -28,6 +28,28 @@ void testQuaternion_set()
     ASSERT_SAME_DOUBLE("Quaternion_set should set v[2]", q.v[2], 2.4);
 }
 
+void testQuaternion_setIdentity()
+{
+    Quaternion q;
+    Quaternion_set(5.1, 4.2, 3.3, 2.4, &q);
+    Quaternion_setIdentity(&q);
+    ASSERT_SAME_DOUBLE("Quaternion_setIdentity has wrong w", q.w, 1);
+    ASSERT_SAME_DOUBLE("Quaternion_setIdentity has wrong v[0]", q.v[0], 0);
+    ASSERT_SAME_DOUBLE("Quaternion_setIdentity has wrong v[1]", q.v[1], 0);
+    ASSERT_SAME_DOUBLE("Quaternion_setIdentity has wrong v[2]", q.v[2], 0);
+}
+
+void testQuaternion_copy()
+{
+    Quaternion q, r;
+    Quaternion_set(5.1, 4.2, 3.3, 2.4, &q);
+    Quaternion_copy(&q, &r);
+    ASSERT_SAME_DOUBLE("Quaternion_copy has wrong w", r.w, q.w);
+    ASSERT_SAME_DOUBLE("Quaternion_copy has wrong v[0]", r.v[0], q.v[0]);
+    ASSERT_SAME_DOUBLE("Quaternion_copy has wrong v[1]", r.v[1], q.v[1]);
+    ASSERT_SAME_DOUBLE("Quaternion_copy has wrong v[2]", r.v[2], q.v[2]);
+}
+
 void testQuaternion_conjugate()
 {
     Quaternion q, c;
@@ -62,17 +84,6 @@ void testQuaternion_norm()
     Quaternion_setIdentity(&c);
     ASSERT_SAME_DOUBLE("Quaternion_norm of valid q", Quaternion_norm(&q), 1);
     ASSERT_SAME_DOUBLE("Quaternion_norm of identity", Quaternion_norm(&c), 1);
-}
-
-void testQuaternion_setIdentity()
-{
-    Quaternion q;
-    Quaternion_set(5.1, 4.2, 3.3, 2.4, &q);
-    Quaternion_setIdentity(&q);
-    ASSERT_SAME_DOUBLE("Quaternion_setIdentity has wrong w", q.w, 1);
-    ASSERT_SAME_DOUBLE("Quaternion_setIdentity has wrong v[0]", q.v[0], 0);
-    ASSERT_SAME_DOUBLE("Quaternion_setIdentity has wrong v[1]", q.v[1], 0);
-    ASSERT_SAME_DOUBLE("Quaternion_setIdentity has wrong v[2]", q.v[2], 0);
 }
 
 void testQuaternion_fromAxisAngle()
@@ -210,10 +221,30 @@ void testQuaternion_rotate()
     ASSERT_SAME_DOUBLE("Quaternion_rotate example 4 (Z-axis)", result[2], 0);
 }
 
+void testQuaternion_slerp()
+{
+    Quaternion q1, q2, result;
+    Quaternion_set(0.6532815, -0.270598, 0.270598, 0.6532815, &q1);
+    Quaternion_set(0.5, 0.5, 0.5, 0.5, &q2);
+
+    Quaternion_slerp(&q1, &q2, 0, &result);
+    ASSERT_TRUE("Quaternion_slerp with t=0", Quaternion_equal(&result, &q1));
+
+    Quaternion_slerp(&q1, &q2, 1, &result);
+    ASSERT_TRUE("Quaternion_slerp with t=1", Quaternion_equal(&result, &q2));
+
+    Quaternion_slerp(&q1, &q2, 0.62, &result);
+    ASSERT_SAME_DOUBLE("Quaternion_slerp with t=0.62 (w)", result.w, 0.6119266025696755);
+    ASSERT_SAME_DOUBLE("Quaternion_slerp with t=0.62 (v[0])", result.v[0], 0.22069444274723088);
+    ASSERT_SAME_DOUBLE("Quaternion_slerp with t=0.62 (v[1])", result.v[1], 0.4498729015909088);
+    ASSERT_SAME_DOUBLE("Quaternion_slerp with t=0.62 (v[2])", result.v[2], 0.6119266025696755);
+}
+
 int main()
 {
     testQuaternion_set();
     testQuaternion_setIdentity();
+    testQuaternion_copy();
     testQuaternion_equal();
     testQuaternion_conjugate();
     testQuaternion_norm();
@@ -224,4 +255,5 @@ int main()
     testQuaternion_toAxisAngle();
     testQuaternion_multiply();
     testQuaternion_rotate();
+    testQuaternion_slerp();
 }
