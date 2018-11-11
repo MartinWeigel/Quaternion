@@ -11,3 +11,4 @@
 - `Quaternion_fromXRotation()` to calculate a quaternion from a rotation around the x-axis
 - `Quaternion_fromYRotation()` to calculate a quaternion from a rotation around the y-axis
 - `Quaternion_fromZRotation()` to calculate a quaternion from a rotation around the z-axis
+- `Quaternion_toAxisAngle()` to calculate the rotation axis and angle from a quaternion

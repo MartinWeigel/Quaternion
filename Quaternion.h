@@ -20,7 +20,7 @@
 #include <stdio.h>
 #include <math.h>
 
-#define QUATERNION_EPS (1e-5)
+#define QUATERNION_EPS (1e-4)
 
 typedef struct Quaternion {
     double w;
@@ -88,6 +88,14 @@ double Quaternion_norm(Quaternion* q);
  */
 void Quaternion_conjugate(Quaternion* q, Quaternion* output);
 
+/**
+ * Calculates the rotation vector and angle of a quaternion.
+ * @output
+ *      A 3D vector of the quaternion rotation axis.
+ * @return
+ *      The rotation angle in radians.
+ */
+double Quaternion_toAxisAngle(Quaternion* q, double output[3]);
 
 // TODO: The following functions are planned, but not yet implemented
 // double Quaternion_getZA(Quaternion* q);

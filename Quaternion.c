@@ -68,7 +68,7 @@ double Quaternion_norm(Quaternion* q)
 void Quaternion_fromAxisAngle(double axis[3], double angle, Quaternion* output)
 {
     assert(output != NULL);
-    // Formulas from http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToAngle/
+    // Formula from http://www.euclideanspace.com/maths/geometry/rotations/conversions/angleToQuaternion/
     output->w = cos(angle / 2.0);
     double c = sin(angle / 2.0);
     output->v[0] = c * axis[0];
@@ -95,4 +95,25 @@ void Quaternion_fromZRotation(double angle, Quaternion* output)
     assert(output != NULL);
     double axis[3] = {0, 0, 1.0};
     Quaternion_fromAxisAngle(axis, angle, output);
+}
+
+double Quaternion_toAxisAngle(Quaternion* q, double output[3])
+{
+    assert(output != NULL);
+    // Formula from http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToAngle/
+    double angle = 2.0 * acos(q->w);
+    double divider = sqrt(1.0 - q->w * q->w);
+
+    if(divider != 0.0) {
+        // Calculate the axis
+        output[0] = q->v[0] / divider;
+        output[1] = q->v[1] / divider;
+        output[2] = q->v[2] / divider;        
+    } else {
+        // Arbitrary normalized axis
+        output[0] = 1;
+        output[1] = 0;
+        output[2] = 0;
+    }
+    return angle;
 }

@@ -123,6 +123,33 @@ void testQuaternion_fromZRotation()
     ASSERT_SAME_DOUBLE("Quaternion_fromZRotation has wrong v[2]", q.v[2], 0.7071);
 }
 
+void testQuaternion_toAxisAngle() {
+    double v90[3];
+    Quaternion rot90;
+    Quaternion_set(0.7071, 0.7071, 0, 0, &rot90);
+    double a90 = Quaternion_toAxisAngle(&rot90, v90);
+    ASSERT_SAME_DOUBLE("Quaternion_toAxisAngle should calculate 90 deg angle", a90, 90.0 / 180.0 * M_PI);
+    ASSERT_SAME_DOUBLE("Quaternion_toAxisAngle should calculate 90 deg X axis", v90[0], 1);
+    ASSERT_SAME_DOUBLE("Quaternion_toAxisAngle should calculate 90 deg Y axis", v90[1], 0);
+    ASSERT_SAME_DOUBLE("Quaternion_toAxisAngle should calculate 90 deg Z axis", v90[2], 0);
+
+    double v0[3];
+    Quaternion rot0;
+    Quaternion_setIdentity(&rot0);
+    double a0 = Quaternion_toAxisAngle(&rot0, v0);
+    ASSERT_SAME_DOUBLE("Quaternion_toAxisAngle should calculate 0 deg angle", a0, 0);
+
+    double arbAxis[3] = {0.802, 0.267, -0.534};
+    double vArb[3];
+    Quaternion rotArb;
+    Quaternion_fromAxisAngle(arbAxis, 1.11, &rotArb);
+    double aArb = Quaternion_toAxisAngle(&rotArb, vArb);
+    ASSERT_SAME_DOUBLE("Quaternion_toAxisAngle should inverse fromAxisAngle() (angle)", aArb, 1.11);
+    ASSERT_SAME_DOUBLE("Quaternion_toAxisAngle should inverse fromAxisAngle() (X axis)", vArb[0], arbAxis[0]);
+    ASSERT_SAME_DOUBLE("Quaternion_toAxisAngle should inverse fromAxisAngle() (Y axis)", vArb[1], arbAxis[1]);
+    ASSERT_SAME_DOUBLE("Quaternion_toAxisAngle should inverse fromAxisAngle() (Z axis)", vArb[2], arbAxis[2]);
+}
+
 int main()
 {
     testQuaternion_set();
@@ -134,4 +161,5 @@ int main()
     testQuaternion_fromXRotation();
     testQuaternion_fromYRotation();
     testQuaternion_fromZRotation();
+    testQuaternion_toAxisAngle();
 }
