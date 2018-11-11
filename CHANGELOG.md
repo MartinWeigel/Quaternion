@@ -6,13 +6,16 @@
 - `Quaternion_setIdentity()` to set the identity quaternion
 - `Quaternion_copy()` to copy a quaternion
 - `Quaternion_equal()` to check if two quaternions are equal
-- `Quaternion_conjugate()` to create the conjugate of a quaternion 
-- `Quaternion_norm()` to calculate the norm of a quaternion
 - `Quaternion_fromAxisAngle()` to calculate a quaternion from a rotation axis and angle
+- `Quaternion_toAxisAngle()` to calculate the rotation axis and angle from a quaternion
+- `Quaternion_fromEulerZYX()` to calculate a quaternion from euler ZYX angles
+- `Quaternion_toEulerZYX()` to calculate the euler ZYX angles from a quaternion
 - `Quaternion_fromXRotation()` to calculate a quaternion from a rotation around the x-axis
 - `Quaternion_fromYRotation()` to calculate a quaternion from a rotation around the y-axis
 - `Quaternion_fromZRotation()` to calculate a quaternion from a rotation around the z-axis
-- `Quaternion_toAxisAngle()` to calculate the rotation axis and angle from a quaternion
+- `Quaternion_conjugate()` to create the conjugate of a quaternion
+- `Quaternion_norm()` to calculate the norm of a quaternion
+- `Quaternion_normalize()` normalizes a quaternion
 - `Quaternion_multiply()` to multiply two quaternions
 - `Quaternion_rotate()` to rotate a vector using a quaternion
 - `Quaternion_slerp()` to interpolate between two quaternions
