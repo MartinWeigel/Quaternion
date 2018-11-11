@@ -102,11 +102,15 @@ double Quaternion_toAxisAngle(Quaternion* q, double output[3]);
  */
 void Quaternion_multiply(Quaternion* q1, Quaternion* q2, Quaternion* output);
 
+/**
+ * Applies quaternion rotation to a given vector.
+ */
+void Quaternion_rotate(Quaternion* q, double v[3], double output[3]);
+
+
 // TODO: The following functions are planned, but not yet implemented
 // double Quaternion_getZA(Quaternion* q);
 // double Quaternion_getYA(Quaternion* q);
 // double Quaternion_getXA(Quaternion* q);
-
-// void Quaternion_rotate(Quaternion* q, double p[3], double output[3]);
 
 // void Quaternion_slerp(Quaternion* q1, Quaternion* q2, double interpolation, Quaternion* output);

@@ -173,6 +173,43 @@ void testQuaternion_multiply()
     ASSERT_TRUE("Quaternion_multiply example 3", Quaternion_equal(&result, &real));
 }
 
+void testQuaternion_rotate()
+{
+    double result[3];
+    double v1[3] = {5.1, 6.8, -5.3};
+    Quaternion identity;
+    Quaternion_setIdentity(&identity);
+    Quaternion_rotate(&identity, v1, result);
+    ASSERT_SAME_DOUBLE("Quaternion_rotate example 1 (X-axis)", result[0], v1[0]);
+    ASSERT_SAME_DOUBLE("Quaternion_rotate example 1 (Y-axis)", result[1], v1[1]);
+    ASSERT_SAME_DOUBLE("Quaternion_rotate example 1 (Z-axis)", result[2], v1[2]);
+
+    // Example 2 from http://web.cs.iastate.edu/~cs577/handouts/quaternion.pdf
+    Quaternion q;
+    double v2[3] = {1, 0, 0};
+    Quaternion_set(0.5, 0.5, 0.5, 0.5, &q);
+    Quaternion_rotate(&q, v2, result);
+    ASSERT_SAME_DOUBLE("Quaternion_rotate example 2 (X-axis)", result[0], 0);
+    ASSERT_SAME_DOUBLE("Quaternion_rotate example 2 (Y-axis)", result[1], 1);
+    ASSERT_SAME_DOUBLE("Quaternion_rotate example 2 (Z-axis)", result[2], 0);
+
+    // Example from https://gamedev.stackexchange.com/questions/119725/why-does-transforming-a-vector3-by-a-quaternion-result-in-reversed-z
+    double v3[3] = {1, 0, 0};
+    Quaternion_set(0.6532815, -0.270598, 0.270598, 0.6532815, &q);
+    Quaternion_rotate(&q, v3, result);
+    ASSERT_SAME_DOUBLE("Quaternion_rotate example 3 (X-axis)", result[0], 0);
+    ASSERT_SAME_DOUBLE("Quaternion_rotate example 3 (Y-axis)", result[1], +0.7071);
+    ASSERT_SAME_DOUBLE("Quaternion_rotate example 3 (Z-axis)", result[2], -0.7071);
+
+    // Example from http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/transforms/index.htm
+    double v4[3] = {1, 0, 0};
+    Quaternion_set(0.7071, 0, 0, 0.7071, &q);
+    Quaternion_rotate(&q, v4, result);
+    ASSERT_SAME_DOUBLE("Quaternion_rotate example 4 (X-axis)", result[0], 0);
+    ASSERT_SAME_DOUBLE("Quaternion_rotate example 4 (Y-axis)", result[1], 1);
+    ASSERT_SAME_DOUBLE("Quaternion_rotate example 4 (Z-axis)", result[2], 0);
+}
+
 int main()
 {
     testQuaternion_set();
@@ -186,4 +223,5 @@ int main()
     testQuaternion_fromZRotation();
     testQuaternion_toAxisAngle();
     testQuaternion_multiply();
+    testQuaternion_rotate();
 }

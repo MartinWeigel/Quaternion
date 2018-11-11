@@ -133,3 +133,34 @@ void Quaternion_multiply(Quaternion* q1, Quaternion* q2, Quaternion* output)
     output->v[1] = q1->w   *q2->v[1] - q1->v[0]*q2->v[2] + q1->v[1]*q2->w    + q1->v[2]*q2->v[0];
     output->v[2] = q1->w   *q2->v[2] + q1->v[0]*q2->v[1] - q1->v[1]*q2->v[0] + q1->v[2]*q2->w   ;
 }
+
+void Quaternion_rotate(Quaternion* q, double v[3], double output[3])
+{
+    assert(output != NULL);
+
+    double ww = q->w * q->w;
+    double xx = q->v[0] * q->v[0];
+    double yy = q->v[1] * q->v[1];
+    double zz = q->v[2] * q->v[2];
+    double wx = q->w * q->v[0];
+    double wy = q->w * q->v[1];
+    double wz = q->w * q->v[2];
+    double xy = q->v[0] * q->v[1];
+    double xz = q->v[0] * q->v[2];
+    double yz = q->v[1] * q->v[2];
+
+    // Formula from http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/transforms/index.htm
+    // p2.x = w*w*p1.x + 2*y*w*p1.z - 2*z*w*p1.y + x*x*p1.x + 2*y*x*p1.y + 2*z*x*p1.z - z*z*p1.x - y*y*p1.x;
+    // p2.y = 2*x*y*p1.x + y*y*p1.y + 2*z*y*p1.z + 2*w*z*p1.x - z*z*p1.y + w*w*p1.y - 2*x*w*p1.z - x*x*p1.y;
+    // p2.z = 2*x*z*p1.x + 2*y*z*p1.y + z*z*p1.z - 2*w*y*p1.x - y*y*p1.z + 2*w*x*p1.y - x*x*p1.z + w*w*p1.z;
+
+    output[0] = ww*v[0] + 2*wy*v[2] - 2*wz*v[1] +
+                xx*v[0] + 2*xy*v[1] + 2*xz*v[2] -
+                zz*v[0] - yy*v[0];
+    output[1] = 2*xy*v[0] + yy*v[1] + 2*yz*v[2] +
+                2*wz*v[0] - zz*v[1] + ww*v[1] -
+                2*wx*v[2] - xx*v[1];
+    output[2] = 2*xz*v[0] + 2*yz*v[1] + zz*v[2] -
+                2*wy*v[0] - yy*v[2] + 2*wx*v[1] -
+                xx*v[2] + ww*v[2];
+}

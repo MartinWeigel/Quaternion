@@ -13,3 +13,4 @@
 - `Quaternion_fromZRotation()` to calculate a quaternion from a rotation around the z-axis
 - `Quaternion_toAxisAngle()` to calculate the rotation axis and angle from a quaternion
 - `Quaternion_multiply()` to multiply two quaternions
+- `Quaternion_rotate()` to rotate a vector using a quaternion
