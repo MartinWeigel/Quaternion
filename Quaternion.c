@@ -117,3 +117,19 @@ double Quaternion_toAxisAngle(Quaternion* q, double output[3])
     }
     return angle;
 }
+
+void Quaternion_multiply(Quaternion* q1, Quaternion* q2, Quaternion* output)
+{
+    assert(output != NULL);
+    /*
+    Formula from http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/arithmetic/index.htm
+             a*e - b*f - c*g - d*h
+        + i (b*e + a*f + c*h- d*g)
+        + j (a*g - b*h + c*e + d*f)
+        + k (a*h + b*g - c*f + d*e)
+    */
+    output->w =    q1->w   *q2->w    - q1->v[0]*q2->v[0] - q1->v[1]*q2->v[1] - q1->v[2]*q2->v[2];
+    output->v[0] = q1->v[0]*q2->w    + q1->w   *q2->v[0] + q1->v[1]*q2->v[2] - q1->v[2]*q2->v[1];
+    output->v[1] = q1->w   *q2->v[1] - q1->v[0]*q2->v[2] + q1->v[1]*q2->w    + q1->v[2]*q2->v[0];
+    output->v[2] = q1->w   *q2->v[2] + q1->v[0]*q2->v[1] - q1->v[1]*q2->v[0] + q1->v[2]*q2->w   ;
+}

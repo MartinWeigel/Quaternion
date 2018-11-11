@@ -123,7 +123,8 @@ void testQuaternion_fromZRotation()
     ASSERT_SAME_DOUBLE("Quaternion_fromZRotation has wrong v[2]", q.v[2], 0.7071);
 }
 
-void testQuaternion_toAxisAngle() {
+void testQuaternion_toAxisAngle()
+{
     double v90[3];
     Quaternion rot90;
     Quaternion_set(0.7071, 0.7071, 0, 0, &rot90);
@@ -150,6 +151,28 @@ void testQuaternion_toAxisAngle() {
     ASSERT_SAME_DOUBLE("Quaternion_toAxisAngle should inverse fromAxisAngle() (Z axis)", vArb[2], arbAxis[2]);
 }
 
+void testQuaternion_multiply()
+{
+    // Examples from https://www.mathworks.com/help/aerotbx/ug/quatmultiply.html
+    Quaternion q1, q2, result, real;
+    Quaternion_set(1.0, 0.0,  1.0, 0.0,  &q1);
+    Quaternion_set(1.0, 0.5,  0.5, 0.75, &q2);
+    Quaternion_set(0.5, 1.25, 1.5, 0.25, &real);
+    Quaternion_multiply(&q1, &q2, &result);
+    ASSERT_TRUE("Quaternion_multiply example 1", Quaternion_equal(&result, &real));
+
+    Quaternion_set(1.0, 0.0,  1.0, 0.0,  &q1);
+    Quaternion_set(0, 0, 2, 0, &real);
+    Quaternion_multiply(&q1, &q1, &result);
+    ASSERT_TRUE("Quaternion_multiply example 2", Quaternion_equal(&result, &real));
+
+    Quaternion_set(1.0, 0.0,  1.0, 0.0,  &q1);
+    Quaternion_set(2.0, 1.0, 0.1,  0.1, &q2);
+    Quaternion_set(1.9, 1.1, 2.1, -0.9, &real);
+    Quaternion_multiply(&q1, &q2, &result);
+    ASSERT_TRUE("Quaternion_multiply example 3", Quaternion_equal(&result, &real));
+}
+
 int main()
 {
     testQuaternion_set();
@@ -162,4 +185,5 @@ int main()
     testQuaternion_fromYRotation();
     testQuaternion_fromZRotation();
     testQuaternion_toAxisAngle();
+    testQuaternion_multiply();
 }
