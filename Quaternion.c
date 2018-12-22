@@ -50,7 +50,7 @@ bool Quaternion_equal(Quaternion* q1, Quaternion* q2)
 
 void Quaternion_fprint(FILE* file, Quaternion* q)
 {
-    fprintf(file, "Quaternion(%.3f, %.3f, %.3f, %.3f)",
+    fprintf(file, "(%.3f, %.3f, %.3f, %.3f)",
         q->w, q->v[0], q->v[1], q->v[2]);
 }
 
@@ -177,6 +177,8 @@ void Quaternion_normalize(Quaternion* q, Quaternion* output)
 void Quaternion_multiply(Quaternion* q1, Quaternion* q2, Quaternion* output)
 {
     assert(output != NULL);
+    Quaternion result;
+
     /*
     Formula from http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/arithmetic/index.htm
              a*e - b*f - c*g - d*h
@@ -184,15 +186,18 @@ void Quaternion_multiply(Quaternion* q1, Quaternion* q2, Quaternion* output)
         + j (a*g - b*h + c*e + d*f)
         + k (a*h + b*g - c*f + d*e)
     */
-    output->w =    q1->w   *q2->w    - q1->v[0]*q2->v[0] - q1->v[1]*q2->v[1] - q1->v[2]*q2->v[2];
-    output->v[0] = q1->v[0]*q2->w    + q1->w   *q2->v[0] + q1->v[1]*q2->v[2] - q1->v[2]*q2->v[1];
-    output->v[1] = q1->w   *q2->v[1] - q1->v[0]*q2->v[2] + q1->v[1]*q2->w    + q1->v[2]*q2->v[0];
-    output->v[2] = q1->w   *q2->v[2] + q1->v[0]*q2->v[1] - q1->v[1]*q2->v[0] + q1->v[2]*q2->w   ;
+    result.w =    q1->w   *q2->w    - q1->v[0]*q2->v[0] - q1->v[1]*q2->v[1] - q1->v[2]*q2->v[2];
+    result.v[0] = q1->v[0]*q2->w    + q1->w   *q2->v[0] + q1->v[1]*q2->v[2] - q1->v[2]*q2->v[1];
+    result.v[1] = q1->w   *q2->v[1] - q1->v[0]*q2->v[2] + q1->v[1]*q2->w    + q1->v[2]*q2->v[0];
+    result.v[2] = q1->w   *q2->v[2] + q1->v[0]*q2->v[1] - q1->v[1]*q2->v[0] + q1->v[2]*q2->w   ;
+
+    *output = result;
 }
 
 void Quaternion_rotate(Quaternion* q, double v[3], double output[3])
 {
     assert(output != NULL);
+    double result[3];
 
     double ww = q->w * q->w;
     double xx = q->v[0] * q->v[0];
@@ -210,19 +215,26 @@ void Quaternion_rotate(Quaternion* q, double v[3], double output[3])
     // p2.y = 2*x*y*p1.x + y*y*p1.y + 2*z*y*p1.z + 2*w*z*p1.x - z*z*p1.y + w*w*p1.y - 2*x*w*p1.z - x*x*p1.y;
     // p2.z = 2*x*z*p1.x + 2*y*z*p1.y + z*z*p1.z - 2*w*y*p1.x - y*y*p1.z + 2*w*x*p1.y - x*x*p1.z + w*w*p1.z;
 
-    output[0] = ww*v[0] + 2*wy*v[2] - 2*wz*v[1] +
+    result[0] = ww*v[0] + 2*wy*v[2] - 2*wz*v[1] +
                 xx*v[0] + 2*xy*v[1] + 2*xz*v[2] -
                 zz*v[0] - yy*v[0];
-    output[1] = 2*xy*v[0] + yy*v[1] + 2*yz*v[2] +
+    result[1] = 2*xy*v[0] + yy*v[1] + 2*yz*v[2] +
                 2*wz*v[0] - zz*v[1] + ww*v[1] -
                 2*wx*v[2] - xx*v[1];
-    output[2] = 2*xz*v[0] + 2*yz*v[1] + zz*v[2] -
+    result[2] = 2*xz*v[0] + 2*yz*v[1] + zz*v[2] -
                 2*wy*v[0] - yy*v[2] + 2*wx*v[1] -
                 xx*v[2] + ww*v[2];
+
+    // Copy result to output
+    output[0] = result[0];
+    output[1] = result[1];
+    output[2] = result[2];
 }
 
 void Quaternion_slerp(Quaternion* q1, Quaternion* q2, double t, Quaternion* output)
 {
+    Quaternion result;
+
     // Based on http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/slerp/index.htm
     double cosHalfTheta = q1->w*q2->w + q1->v[0]*q2->v[0] + q1->v[1]*q2->v[1] + q1->v[2]*q2->v[2];
 
@@ -237,17 +249,19 @@ void Quaternion_slerp(Quaternion* q1, Quaternion* q2, double t, Quaternion* outp
     // If theta = 180 degrees then result is not fully defined
     // We could rotate around any axis normal to q1 or q2
     if (fabs(sinHalfTheta) < QUATERNION_EPS) {
-        output->w = (q1->w * 0.5 + q2->w * 0.5);
-        output->v[0] = (q1->v[0] * 0.5 + q2->v[0] * 0.5);
-        output->v[1] = (q1->v[1] * 0.5 + q2->v[1] * 0.5);
-        output->v[2] = (q1->v[2] * 0.5 + q2->v[2] * 0.5);
+        result.w = (q1->w * 0.5 + q2->w * 0.5);
+        result.v[0] = (q1->v[0] * 0.5 + q2->v[0] * 0.5);
+        result.v[1] = (q1->v[1] * 0.5 + q2->v[1] * 0.5);
+        result.v[2] = (q1->v[2] * 0.5 + q2->v[2] * 0.5);
     }
 
     // Calculate Quaternion
     double ratioA = sin((1 - t) * halfTheta) / sinHalfTheta;
     double ratioB = sin(t * halfTheta) / sinHalfTheta; 
-    output->w = (q1->w * ratioA + q2->w * ratioB);
-    output->v[0] = (q1->v[0] * ratioA + q2->v[0] * ratioB);
-    output->v[1] = (q1->v[1] * ratioA + q2->v[1] * ratioB);
-    output->v[2] = (q1->v[2] * ratioA + q2->v[2] * ratioB);
+    result.w = (q1->w * ratioA + q2->w * ratioB);
+    result.v[0] = (q1->v[0] * ratioA + q2->v[0] * ratioB);
+    result.v[1] = (q1->v[1] * ratioA + q2->v[1] * ratioB);
+    result.v[2] = (q1->v[2] * ratioA + q2->v[2] * ratioB);
+
+    *output = result;
 }

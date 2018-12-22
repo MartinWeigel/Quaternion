@@ -1,5 +1,15 @@
 # Changelog
 
+## 2018-12-23
+### Fixed
+- `Quaternion_multiply(q1, q2, out)` works correct if out points to q1 or q2
+- `Quaternion_rotate(_, v, out)` works correct if out points to v
+- `Quaternion_slerp(q1, q2, _, out)` works correct if out points to q1 or q2
+
+### Changed
+- `Quaternion_fprint()` does not print *Quaternion* before bracket
+
+
 ## 2018-11-11
 ### Added
 - `Quaternion_set()` to set quaternion values

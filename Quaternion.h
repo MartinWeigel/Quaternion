@@ -122,7 +122,11 @@ void Quaternion_normalize(Quaternion* q, Quaternion* output);
 void Quaternion_conjugate(Quaternion* q, Quaternion* output);
 
 /**
- * Multiplies two quaternions.
+ * Multiplies two quaternions: output = q1 * q2
+ * @q1
+ *      The rotation to apply on q2.
+ * @q2
+ *      The orientation to be rotated.
  */
 void Quaternion_multiply(Quaternion* q1, Quaternion* q2, Quaternion* output);
 
