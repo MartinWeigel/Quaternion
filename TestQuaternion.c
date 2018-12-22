@@ -1,7 +1,5 @@
 // TEST: gcc -Wall -Wextra .\TestQuaternion.c .\Quaternion.c -o TestQuaternion.exe; .\TestQuaternion.exe
-#include <string.h>
-#include <stdio.h>
-#include <assert.h>
+#include <stdlib.h>
 #include "Quaternion.h"
 
 #define TO_RAD(x) (x / 180.0 * M_PI)
@@ -20,7 +18,7 @@ void ASSERT_TRUE(char* description, bool check)
 }
 void ASSERT_FALSE(char* description, bool check) { ASSERT_TRUE(description, !check); }
 
-void testQuaternion_set()
+void testQuaternion_set(void)
 {
     Quaternion q;
     Quaternion_set(5.1, 4.2, 3.3, 2.4, &q);
@@ -30,7 +28,7 @@ void testQuaternion_set()
     ASSERT_SAME_DOUBLE("Quaternion_set should set v[2]", q.v[2], 2.4);
 }
 
-void testQuaternion_setIdentity()
+void testQuaternion_setIdentity(void)
 {
     Quaternion q;
     Quaternion_set(5.1, 4.2, 3.3, 2.4, &q);
@@ -41,7 +39,7 @@ void testQuaternion_setIdentity()
     ASSERT_SAME_DOUBLE("Quaternion_setIdentity has wrong v[2]", q.v[2], 0);
 }
 
-void testQuaternion_copy()
+void testQuaternion_copy(void)
 {
     Quaternion q, r;
     Quaternion_set(5.1, 4.2, 3.3, 2.4, &q);
@@ -52,7 +50,7 @@ void testQuaternion_copy()
     ASSERT_SAME_DOUBLE("Quaternion_copy has wrong v[2]", r.v[2], q.v[2]);
 }
 
-void testQuaternion_conjugate()
+void testQuaternion_conjugate(void)
 {
     Quaternion q, c;
     Quaternion_set(5.1, 4.2, 3.3, 2.4, &q);
@@ -63,7 +61,7 @@ void testQuaternion_conjugate()
     ASSERT_SAME_DOUBLE("Quaternion_conjugate should negate v[2]",c.v[2], -q.v[2]);
 }
 
-void testQuaternion_equal()
+void testQuaternion_equal(void)
 {
     Quaternion q1, q2, q3, q4, q5;
     Quaternion_set(5.1, 4.2, 3.3, 2.4, &q1);
@@ -78,7 +76,7 @@ void testQuaternion_equal()
     ASSERT_FALSE("Quaternion_equal with different v", Quaternion_equal(&q1, &q5));
 }
 
-void testQuaternion_norm()
+void testQuaternion_norm(void)
 {
     Quaternion q, c;
     Quaternion_set(0.7071, 0.7071, 0, 0, &q);
@@ -90,7 +88,7 @@ void testQuaternion_norm()
     ASSERT_SAME_DOUBLE("Quaternion_norm larger 1", Quaternion_norm(&q), sqrt(126));
 }
 
-void testQuaternion_normalize()
+void testQuaternion_normalize(void)
 {
     Quaternion q, c;
     Quaternion_set(0.7071, 0.7071, 0, 0, &q);
@@ -103,7 +101,7 @@ void testQuaternion_normalize()
     ASSERT_SAME_DOUBLE("Quaternion_normalize is 1 afterwards", Quaternion_norm(&c), 1);
 }
 
-void testQuaternion_fromAxisAngle()
+void testQuaternion_fromAxisAngle(void)
 {
     Quaternion q;
     double vector[3] = {1, 0, 0};
@@ -115,7 +113,7 @@ void testQuaternion_fromAxisAngle()
     ASSERT_SAME_DOUBLE("Quaternion_fromAxisAngle has wrong v[2]", q.v[2], 0);
 }
 
-void testQuaternion_fromXRotation()
+void testQuaternion_fromXRotation(void)
 {
     Quaternion q;
     double vector[3] = {1, 0, 0};
@@ -127,7 +125,7 @@ void testQuaternion_fromXRotation()
     ASSERT_SAME_DOUBLE("Quaternion_fromXRotation has wrong v[2]", q.v[2], 0);
 }
 
-void testQuaternion_fromYRotation()
+void testQuaternion_fromYRotation(void)
 {
     Quaternion q;
     double vector[3] = {0, 1, 0};
@@ -139,7 +137,7 @@ void testQuaternion_fromYRotation()
     ASSERT_SAME_DOUBLE("Quaternion_fromYRotation has wrong v[2]", q.v[2], 0);
 }
 
-void testQuaternion_fromZRotation()
+void testQuaternion_fromZRotation(void)
 {
     Quaternion q;
     double vector[3] = {0, 0, 1};
@@ -151,7 +149,7 @@ void testQuaternion_fromZRotation()
     ASSERT_SAME_DOUBLE("Quaternion_fromZRotation has wrong v[2]", q.v[2], 0.7071);
 }
 
-void testQuaternion_toAxisAngle()
+void testQuaternion_toAxisAngle(void)
 {
     double v90[3];
     Quaternion rot90;
@@ -179,7 +177,7 @@ void testQuaternion_toAxisAngle()
     ASSERT_SAME_DOUBLE("Quaternion_toAxisAngle should inverse fromAxisAngle() (Z axis)", vArb[2], arbAxis[2]);
 }
 
-void testQuaternion_fromEulerZYX()
+void testQuaternion_fromEulerZYX(void)
 {
     // Check test with https://www.andre-gaschler.com/rotationconverter/
     double e0[3] = {TO_RAD(90.0), 0, 0};
@@ -204,7 +202,7 @@ void testQuaternion_fromEulerZYX()
     ASSERT_TRUE("Quaternion_fromEulerZYX example 3", Quaternion_equal(&q, &real));
 }
 
-void testQuaternion_toEulerZYX()
+void testQuaternion_toEulerZYX(void)
 {
     // Check test with https://www.andre-gaschler.com/rotationconverter/
     double euler[3];
@@ -234,7 +232,7 @@ void testQuaternion_toEulerZYX()
     ASSERT_SAME_DOUBLE("Quaternion_toEulerZYX xy-rotation (Z axis)", euler[2], TO_RAD(122.0));
 }
 
-void testQuaternion_multiply()
+void testQuaternion_multiply(void)
 {
     // Examples from https://www.mathworks.com/help/aerotbx/ug/quatmultiply.html
     Quaternion q1, q2, result, real;
@@ -256,7 +254,7 @@ void testQuaternion_multiply()
     ASSERT_TRUE("Quaternion_multiply example 3", Quaternion_equal(&result, &real));
 }
 
-void testQuaternion_rotate()
+void testQuaternion_rotate(void)
 {
     double result[3];
     double v1[3] = {5.1, 6.8, -5.3};
@@ -293,7 +291,7 @@ void testQuaternion_rotate()
     ASSERT_SAME_DOUBLE("Quaternion_rotate example 4 (Z-axis)", result[2], 0);
 }
 
-void testQuaternion_slerp()
+void testQuaternion_slerp(void)
 {
     Quaternion q1, q2, result;
     Quaternion_set(0.6532815, -0.270598, 0.270598, 0.6532815, &q1);
@@ -312,7 +310,7 @@ void testQuaternion_slerp()
     ASSERT_SAME_DOUBLE("Quaternion_slerp with t=0.62 (v[2])", result.v[2], 0.6119266025696755);
 }
 
-int main()
+int main(void)
 {
     testQuaternion_set();
     testQuaternion_setIdentity();
@@ -331,4 +329,5 @@ int main()
     testQuaternion_multiply();
     testQuaternion_rotate();
     testQuaternion_slerp();
+    return EXIT_SUCCESS;
 }
