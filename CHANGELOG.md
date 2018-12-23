@@ -1,6 +1,10 @@
 # Changelog
 
 ## 2018-12-23
+### Added
+- A readme file `README.md`
+- Example usage in `example.c`
+
 ### Fixed
 - `Quaternion_multiply(q1, q2, out)` works correct if out points to q1 or q2
 - `Quaternion_rotate(_, v, out)` works correct if out points to v
