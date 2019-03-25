@@ -18,7 +18,8 @@
 #include <stdlib.h>
 #include "Quaternion.h"
 
-void printState(double* position, Quaternion* orientation) {
+void printState(double* position, Quaternion* orientation)
+{
     // Output the curre
     printf("Character position:    (%.3f, %.3f, %.3f)\n",
         position[0], position[1], position[2]);
@@ -79,7 +80,7 @@ int main(void)
 
         t += TIME_STEP;
     }
-    
+
     printState(position, &orientation);
 
     return EXIT_SUCCESS;

@@ -63,7 +63,7 @@ void Quaternion_fromAxisAngle(double axis[3], double angle, Quaternion* output)
     double c = sin(angle / 2.0);
     output->v[0] = c * axis[0];
     output->v[1] = c * axis[1];
-    output->v[2] = c * axis[2];    
+    output->v[2] = c * axis[2];
 }
 
 double Quaternion_toAxisAngle(Quaternion* q, double output[3])
@@ -77,7 +77,7 @@ double Quaternion_toAxisAngle(Quaternion* q, double output[3])
         // Calculate the axis
         output[0] = q->v[0] / divider;
         output[1] = q->v[1] / divider;
-        output[2] = q->v[2] / divider;        
+        output[2] = q->v[2] / divider;
     } else {
         // Arbitrary normalized axis
         output[0] = 1;
@@ -143,7 +143,7 @@ void Quaternion_toEulerZYX(Quaternion* q, double output[3])
 
     // Yaw (z-axis rotation)
     double siny_cosp = +2.0 * (q->w * q->v[2] + q->v[0] * q->v[1]);
-    double cosy_cosp = +1.0 - 2.0 * (q->v[1] * q->v[1] + q->v[2] * q->v[2]);  
+    double cosy_cosp = +1.0 - 2.0 * (q->v[1] * q->v[1] + q->v[2] * q->v[2]);
     output[2] = atan2(siny_cosp, cosy_cosp);
 }
 
@@ -157,7 +157,7 @@ void Quaternion_conjugate(Quaternion* q, Quaternion* output)
 }
 
 double Quaternion_norm(Quaternion* q)
-{ 
+{
     assert(q != NULL);
     return sqrt(q->w*q->w + q->v[0]*q->v[0] + q->v[1]*q->v[1] + q->v[2]*q->v[2]);
 }
@@ -257,7 +257,7 @@ void Quaternion_slerp(Quaternion* q1, Quaternion* q2, double t, Quaternion* outp
 
     // Calculate Quaternion
     double ratioA = sin((1 - t) * halfTheta) / sinHalfTheta;
-    double ratioB = sin(t * halfTheta) / sinHalfTheta; 
+    double ratioB = sin(t * halfTheta) / sinHalfTheta;
     result.w = (q1->w * ratioA + q2->w * ratioB);
     result.v[0] = (q1->v[0] * ratioA + q2->v[0] * ratioB);
     result.v[1] = (q1->v[1] * ratioA + q2->v[1] * ratioB);

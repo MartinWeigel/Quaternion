@@ -93,5 +93,5 @@ In each iteration, we calculate the new orientation, before applying it to the m
 
 After the 10000 steps, our character is in position `(-199.899, 2.000, 0.000)`.
 In total, our character walked 314 meters (10000 * 0.0314), which equals half the circumference of the circle (`C/2`).
-Using the formula `D = C / PI`, the diameter of our circle was `D = 314*2 / PI ≈ 200`. 
+Using the formula `D = C / PI`, the diameter of our circle was `D = 314*2 / PI ≈ 200`.
 This is the distance our character traveled along the X-axis (towards his initial left).
