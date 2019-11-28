@@ -1,4 +1,4 @@
-// Copyright (C) 2018 Martin Weigel <mail@MartinWeigel.com>
+// Copyright (C) 2019 Martin Weigel <mail@MartinWeigel.com>
 //
 // Permission to use, copy, modify, and/or distribute this software for any
 // purpose with or without fee is hereby granted, provided that the above
@@ -12,19 +12,28 @@
 // ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 // OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-// Version: 2018-12-22
-
+/**
+ * @file    Quaternion.h
+ * @brief   A basic quaternion library written in C
+ * @date    2019-11-28
+ */
 #pragma once
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <math.h>
 
+/**
+ * Maximum floating point difference that is considered as equal.
+ */
 #define QUATERNION_EPS (1e-4)
 
+/**
+ * Data structure to hold a quaternion.
+ */
 typedef struct Quaternion {
-    double w;
-    double v[3];
+    double w;       /**< Scalar part */
+    double v[3];    /**< Vector part */
 } Quaternion;
 
 /**
@@ -48,22 +57,22 @@ void Quaternion_copy(Quaternion* q, Quaternion* output);
 bool Quaternion_equal(Quaternion* q1, Quaternion* q2);
 
 /**
- * Print the quaternion to a given file (e.g. stderr).
+ * Print the quaternion to a given file (e.g., stderr).
  */
 void Quaternion_fprint(FILE* file, Quaternion* q);
 
 /**
  * Set the quaternion to the equivalent of axis-angle rotation.
- * @axis
+ * @param axis
  *      The axis of the rotation (should be normalized).
- * @angle
+ * @param angle
  *      Rotation angle in radians.
  */
 void Quaternion_fromAxisAngle(double axis[3], double angle, Quaternion* output);
 
 /**
  * Calculates the rotation vector and angle of a quaternion.
- * @output
+ * @param output
  *      A 3D vector of the quaternion rotation axis.
  * @return
  *      The rotation angle in radians.
@@ -72,35 +81,35 @@ double Quaternion_toAxisAngle(Quaternion* q, double output[3]);
 
 /**
  * Set the quaternion to the equivalent of euler angles.
- * @eulerZYX
+ * @param eulerZYX
  *      Euler angles in ZYX, but stored in array as [x'', y', z].
  */
 void Quaternion_fromEulerZYX(double eulerZYX[3], Quaternion* output);
 
 /**
  * Calculates the euler angles of a quaternion.
- * @output
+ * @param output
  *      Euler angles in ZYX, but stored in array as [x'', y', z].
  */
 void Quaternion_toEulerZYX(Quaternion* q, double output[3]);
 
 /**
  * Set the quaternion to the equivalent a rotation around the X-axis.
- * @angle
+ * @param angle
  *      Rotation angle in radians.
  */
 void Quaternion_fromXRotation(double angle, Quaternion* output);
 
 /**
  * Set the quaternion to the equivalent a rotation around the Y-axis.
- * @angle
+ * @param angle
  *      Rotation angle in radians.
  */
 void Quaternion_fromYRotation(double angle, Quaternion* output);
 
 /**
  * Set the quaternion to the equivalent a rotation around the Z-axis.
- * @angle
+ * @param angle
  *      Rotation angle in radians.
  */
 void Quaternion_fromZRotation(double angle, Quaternion* output);
@@ -123,9 +132,9 @@ void Quaternion_conjugate(Quaternion* q, Quaternion* output);
 
 /**
  * Multiplies two quaternions: output = q1 * q2
- * @q1
+ * @param q1
  *      The rotation to apply on q2.
- * @q2
+ * @param q2
  *      The orientation to be rotated.
  */
 void Quaternion_multiply(Quaternion* q1, Quaternion* q2, Quaternion* output);
@@ -137,7 +146,7 @@ void Quaternion_rotate(Quaternion* q, double v[3], double output[3]);
 
 /**
  * Interpolates between two quaternions.
- * @t
+ * @param t
  *      Interpolation between the two quaternions [0, 1].
  *      0 is equal with q1, 1 is equal with q2, 0.5 is the middle between q1 and q2.
  */

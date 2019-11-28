@@ -1,5 +1,9 @@
 # Changelog
 
+## 2019-11-28
+### Added
+- Doxygen support
+
 ## 2018-12-23
 ### Added
 - A readme file `README.md`
