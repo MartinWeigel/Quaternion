@@ -65,10 +65,10 @@ int main(void)
 
     // The character position should be: (0, 2, 0)
     printState(position, &orientation);
-    printf("\n");
 
+    printf("--------------------------------------------------------------------------------\n");
     float rotationAngleDegree = 30.0;
-    printf("ROTATION % 08.3f degree on z axis EXAMPLE\n", rotationAngleDegree);
+    printf("Quaternion_fromZRotation % 08.3f degree on z axis EXAMPLE\n", rotationAngleDegree);
     {
         Quaternion rotated_orientation;
         Quaternion_setIdentity(&rotated_orientation);   // The identity quaternion represents no rotation
@@ -93,138 +93,25 @@ int main(void)
         }
     }
 
-    rotationAngleDegree = 90.0;
-    printf("ROTATION % 08.3f degree on z and y axis EXAMPLE\n", rotationAngleDegree);
+    printf("--------------------------------------------------------------------------------\n");
     {
+        double yaw_deg =  45.0;
+        double pitch_deg =  45.0;
+        double roll_deg =  0.0;
+        printf("Quaternion_fromEulerZYX y: % 08.3f° p: % 08.3f° r: % 08.3f°:\n\t", yaw_deg, pitch_deg, roll_deg);
+        double eulerAngles[3] = {yaw_deg/ 180.0 * M_PI, pitch_deg/ 180.0 * M_PI, roll_deg/ 180.0 * M_PI};
         Quaternion rotated_orientation;
-        Quaternion_setIdentity(&rotated_orientation);   // The identity quaternion represents no rotation
-
-        double rotationAngle = rotationAngleDegree / 180.0 * M_PI;             // Rotation angle in radians
-        
-        Quaternion rotated_orientation_z;
-        Quaternion_setIdentity(&rotated_orientation_z);
-        Quaternion_fromZRotation(rotationAngle, &rotated_orientation_z);   // Set rotateLeft to represent the Z-rotation
-        printf("rotated_orientation_z\t"); Quaternion_fprint(stdout, &rotated_orientation_z); printf("\n");
-
-        Quaternion rotated_orientation_z_conj;
-        Quaternion_setIdentity(&rotated_orientation_z_conj);   // The identity quaternion represents no rotation
-
-        Quaternion_conjugate(&rotated_orientation_z, &rotated_orientation_z_conj);
-        printf("rotated_orientation_z_conj\t"); Quaternion_fprint(stdout, &rotated_orientation_z_conj); printf("\n");
-
-        Quaternion rotated_orientation_y;
-        Quaternion_setIdentity(&rotated_orientation_y);
-        Quaternion_fromYRotation(rotationAngle, &rotated_orientation_y);   // Set rotateLeft to represent the Z-rotation
-        printf("rotated_orientation_y\t"); Quaternion_fprint(stdout, &rotated_orientation_y); printf("\n");
-
-        Quaternion rotated_orientation_y_conj;
-        Quaternion_setIdentity(&rotated_orientation_y_conj);   // The identity quaternion represents no rotation
-
-        Quaternion_conjugate(&rotated_orientation_y, &rotated_orientation_y_conj);
-        printf("rotated_orientation_y_conj\t"); Quaternion_fprint(stdout, &rotated_orientation_y_conj); printf("\n");
-
-        Quaternion rotated_orientation_comb, rotated_orientation_comb_conj, rotated_orientation_comb_conj_1;
-        Quaternion_setIdentity(&rotated_orientation_comb);
-        Quaternion_setIdentity(&rotated_orientation_comb_conj);
-        Quaternion_setIdentity(&rotated_orientation_comb_conj_1);
-
-        Quaternion_multiply(&rotated_orientation_y, &rotated_orientation_z, &rotated_orientation_comb);
-        Quaternion_multiply(&rotated_orientation_z_conj, &rotated_orientation_y_conj, &rotated_orientation_comb_conj);
-        
-        Quaternion_conjugate(&rotated_orientation_comb, &rotated_orientation_comb_conj_1);
-
-        printf("rotated_orientation_comb\t"); Quaternion_fprint(stdout, &rotated_orientation_comb); printf("\n");
-        printf("rotated_orientation_comb_conj\t"); Quaternion_fprint(stdout, &rotated_orientation_comb_conj); printf("\n");
-        printf("rotated_orientation_comb_conj_1\t"); Quaternion_fprint(stdout, &rotated_orientation_comb_conj_1); printf("\n");
-
-        double axisAngle[3] = {0, 0, 0};
-        double angle = Quaternion_toAxisAngle(&rotated_orientation_comb, axisAngle);
-        printf("Axis angle:   % 08.3f (% 08.3f, % 08.3f, % 08.3f)\n", angle,
-        axisAngle[0], axisAngle[1], axisAngle[2]);
-
-        double position_rot[3] = {10, 0, 0};
-        // Rotations
-        for (size_t i = 0; i < (size_t)(180.0 / rotationAngleDegree * 2.0); i++)
-        {
-            Quaternion_rotate(&rotated_orientation_comb, position_rot, position_rot);   // Calculate move in character coordinate system
-
-            printf("\t%u rotation\n\t\t", i);
-            simplePrintState(position_rot, &rotated_orientation);
-        }
-    }
-
-    rotationAngleDegree = 90.0;
-    printf("ROTATION % 08.3f degree on x y and z axis EXAMPLE\n", rotationAngleDegree);
-    {
-        Quaternion rotated_orientation;
-        Quaternion_setIdentity(&rotated_orientation);   // The identity quaternion represents no rotation
-
-        double rotationAngle = rotationAngleDegree / 180.0 * M_PI;             // Rotation angle in radians
-/*         Quaternion_fromZRotation(rotationAngle, &rotated_orientation);   // Set rotateLeft to represent the Z-rotation
-        printf("Quaternion_fromZRotation\t"); Quaternion_fprint(stdout, &rotated_orientation); printf("\n");
-
-        Quaternion_fromYRotation(rotationAngle, &rotated_orientation);   // Set rotateLeft to represent the Z-rotation
-        printf("Quaternion_fromYRotation\t"); Quaternion_fprint(stdout, &rotated_orientation); printf("\n");
-
-        Quaternion_fromZRotation(rotationAngle, &rotated_orientation);   // Set rotateLeft to represent the Z-rotation
-        printf("Quaternion_fromZRotation\t"); Quaternion_fprint(stdout, &rotated_orientation); printf("\n");
- */
-        Quaternion rotated_orientation_comb_temp, rotated_orientation_comb;
-        Quaternion_setIdentity(&rotated_orientation_comb_temp);
-        Quaternion_setIdentity(&rotated_orientation_comb);
-
-        Quaternion rotated_orientation_z;
-        Quaternion_setIdentity(&rotated_orientation_z);
-        Quaternion_fromZRotation(rotationAngle, &rotated_orientation_z);
-
-        Quaternion rotated_orientation_y;
-        Quaternion_setIdentity(&rotated_orientation_y);
-        Quaternion_fromYRotation(rotationAngle, &rotated_orientation_y);
-
-        Quaternion rotated_orientation_x;
-        Quaternion_setIdentity(&rotated_orientation_x);
-        Quaternion_fromXRotation(rotationAngle, &rotated_orientation_x);
-
-        Quaternion_multiply(&rotated_orientation_z, &rotated_orientation_y, &rotated_orientation_comb_temp);
-        Quaternion_multiply(&rotated_orientation_comb_temp, &rotated_orientation_x, &rotated_orientation_comb);
-        printf("rotated_orientation_comb\t"); Quaternion_fprint(stdout, &rotated_orientation_comb); printf("\n");
-        
-/*         double axisAngle[3] = {0, 0, 0};
-        double angle = Quaternion_toAxisAngle(&rotated_orientation_comb, axisAngle);
-        printf("Axis angle:   % 08.3f (% 08.3f, % 08.3f, % 08.3f)\n", angle,
-        axisAngle[0], axisAngle[1], axisAngle[2]); */
-
-        double position_rot[3] = {10, 10, 10};
-        // Rotations
-        for (size_t i = 0; i < (size_t)(180.0 / rotationAngleDegree * 2.0); i++)
-        {
-            Quaternion_rotate(&rotated_orientation_comb, position_rot, position_rot);   // Calculate move in character coordinate system
-
-            printf("\t%u rotation\n\t\t", i);
-            simplePrintState(position_rot, &rotated_orientation_comb);
-        }
-    }
-
-    rotationAngleDegree = 45.0;
-    printf("ROTATION % 08.3f degree on x y and z axis EXAMPLE AxisAngle\n", rotationAngleDegree);
-    {
-        Quaternion rotated_orientation;
-        Quaternion_setIdentity(&rotated_orientation);   // The identity quaternion represents no rotation
-
-        double rotationAngle = rotationAngleDegree / 180.0 * M_PI;             // Rotation angle in radians
-        double eulerAngles[3] = {rotationAngle, rotationAngle, rotationAngle};
-
-        Quaternion_fromAxisAngle(eulerAngles, rotationAngleDegree, &rotated_orientation);
-        printf("rotated_orientation\t"); Quaternion_fprint(stdout, &rotated_orientation); printf("\n");
+        Quaternion_fromEulerZYX(eulerAngles, &rotated_orientation);
+        printf("Quaternion_fromEulerZYX\t\t"); Quaternion_fprint(stdout, &rotated_orientation); printf("\n\t");
 
         double axisAngle[3] = {0, 0, 0};
         double angle = Quaternion_toAxisAngle(&rotated_orientation, axisAngle);
-        printf("Axis angle:   % 08.3f (% 08.3f, % 08.3f, % 08.3f)\n", angle,
+        printf("Axis angle:\t\t% 08.3f (% 08.3f, % 08.3f, % 08.3f)\n", angle,
         axisAngle[0], axisAngle[1], axisAngle[2]);
 
-        double position_rot[3] = {10, 0, 0};
+        double position_rot[3] = {10, 10, 10};
         // Rotations
-        for (size_t i = 0; i < (size_t)(180.0 / rotationAngleDegree * 2.0); i++)
+        for (size_t i = 0; i < (size_t)(180.0 / yaw_deg * 2.0); i++)
         {
             Quaternion_rotate(&rotated_orientation, position_rot, position_rot);   // Calculate move in character coordinate system
 
@@ -233,9 +120,36 @@ int main(void)
         }
     }
 
+    printf("--------------------------------------------------------------------------------\n");
+    {
+        double yaw_deg =  45.0;
+        double pitch_deg =  45.0;
+        double roll_deg =  45.0;
+        printf("Quaternion_fromEulerZYX y: % 08.3f° p: % 08.3f° r: % 08.3f°:\n\t", yaw_deg, pitch_deg, roll_deg);
+        double eulerAngles[3] = {yaw_deg/ 180.0 * M_PI, pitch_deg/ 180.0 * M_PI, roll_deg/ 180.0 * M_PI};
+        Quaternion rotated_orientation;
+        Quaternion_fromEulerZYX(eulerAngles, &rotated_orientation);
+        printf("Quaternion_fromEulerZYX\t\t"); Quaternion_fprint(stdout, &rotated_orientation); printf("\n\t");
+
+        double axisAngle[3] = {0, 0, 0};
+        double angle = Quaternion_toAxisAngle(&rotated_orientation, axisAngle);
+        printf("Axis angle:\t\t% 08.3f (% 08.3f, % 08.3f, % 08.3f)\n", angle,
+        axisAngle[0], axisAngle[1], axisAngle[2]);
+
+        double position_rot[3] = {10, 10, 10};
+        // Rotations
+        for (size_t i = 0; i < (size_t)(180.0 / yaw_deg * 2.0); i++)
+        {
+            Quaternion_rotate(&rotated_orientation, position_rot, position_rot);   // Calculate move in character coordinate system
+
+            printf("\t%u rotation\n\t\t", i);
+            simplePrintState(position_rot, &rotated_orientation);
+        }
+    }
+
+    printf("--------------------------------------------------------------------------------\n");
     printf("Hemisphere sensor layout EXAMPLE\n");
     {
-        double axisAngle[3] = {0, 0, 0};
         Quaternion hemispher_sensors[14];
         double angles[14][3];
         for (size_t i = 0; i < sizeof(hemispher_sensors)/sizeof(hemispher_sensors[0]); i++)
@@ -259,7 +173,6 @@ int main(void)
                 angles[idx][1] = pitch;
                 angles[idx][2] = roll;
                 
-                // printf("Quaternion_fromEulerZYX y: % 08.3f p: % 08.3f r: % 08.3f\t:\t", yaw, pitch, roll);
                 {
                     double eulerAngles[3] = {yaw/ 180.0 * M_PI, pitch/ 180.0 * M_PI, roll/ 180.0 * M_PI};
                     Quaternion rotated_orientation;
@@ -270,7 +183,6 @@ int main(void)
                     hemispher_sensors[idx].v[2] = rotated_orientation.v[2];
                     hemispher_sensors[idx].w = rotated_orientation.w;
                     idx = idx +1;
-                    // Quaternion_fprint(stdout, &rotated_orientation); printf("\n");
                 }
             }
         }
@@ -282,7 +194,6 @@ int main(void)
         angles[idx][1] = pitch;
         angles[idx][2] = roll;
 
-        // printf("Quaternion_fromEulerZYX y: % 08.3f p: % 08.3f r: % 08.3f\t:\t", yaw, pitch, roll);
         {
             double eulerAngles[3] = {yaw/ 180.0 * M_PI, pitch/ 180.0 * M_PI, roll/ 180.0 * M_PI};
             Quaternion rotated_orientation;
@@ -291,21 +202,18 @@ int main(void)
             hemispher_sensors[idx].v[1] = rotated_orientation.v[1];
             hemispher_sensors[idx].v[2] = rotated_orientation.v[2];
             hemispher_sensors[idx].w = rotated_orientation.w;
-            idx = idx +1;
-            // Quaternion_fprint(stdout, &rotated_orientation); printf("\n");
+            idx = idx + 1;
         }
 
         double position_rot[3] = {1.0, 0, 0};
         for (size_t i = 0; i < idx; i++)
         {
-            // Quaternion_rotate(&hemispher_sensors[i], position_rot, position_rot);
-            printf("% 08.3f, % 08.3f, % 08.3f\t", angles[i][0], angles[i][1], angles[i][2]);
+            printf("% 08.3f°, % 08.3f°, % 08.3f°\t", angles[i][0], angles[i][1], angles[i][2]);
             simplePrintState(position_rot, &hemispher_sensors[i]);
         }
-        
     }
 
-
+    printf("================================================================================\n");
     printf("ADVANCED EXAMPLE\n");
     // Walks half a circle with 10000 steps
     const double STEP_COUNT = 10000;                     // Walk 10000 steps in half circle
