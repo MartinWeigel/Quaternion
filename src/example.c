@@ -21,7 +21,7 @@
 void printState(double* position, Quaternion* orientation)
 {
     // Output the curre
-    printf("Character position:    (%.3f, %.3f, %.3f)\n",
+    printf("Character position:    (% 08.3f, % 08.3f, % 08.3f)\n",
         position[0], position[1], position[2]);
     printf("Character orientation: ");
     Quaternion_fprint(stdout, orientation);
@@ -33,7 +33,7 @@ void simplePrintState(double* position, Quaternion* orientation)
 {
     // Output the curre
     Quaternion_fprint(stdout, orientation);
-    printf("(%3.3f, %3.3f, %3.3f)",
+    printf("(% 08.3f, % 08.3f, % 08.3f)",
         position[0], position[1], position[2]);
     printf("\n");
 }
@@ -68,7 +68,7 @@ int main(void)
     printf("\n");
 
     float rotationAngleDegree = 30.0;
-    printf("ROTATION %3.2f degree on z axis EXAMPLE\n", rotationAngleDegree);
+    printf("ROTATION % 08.3f degree on z axis EXAMPLE\n", rotationAngleDegree);
     {
         Quaternion rotated_orientation;
         Quaternion_setIdentity(&rotated_orientation);   // The identity quaternion represents no rotation
@@ -79,7 +79,7 @@ int main(void)
 
         double axisAngle[3] = {0, 0, 0};
         double angle = Quaternion_toAxisAngle(&rotated_orientation, axisAngle);
-        printf("Axis angle:   %.3f (%.3f, %.3f, %.3f)\n", angle,
+        printf("Axis angle:   % 08.3f (% 08.3f, % 08.3f, % 08.3f)\n", angle,
         axisAngle[0], axisAngle[1], axisAngle[2]);
 
         double position_rot[3] = {10, 0, 0};
@@ -94,7 +94,7 @@ int main(void)
     }
 
     rotationAngleDegree = 90.0;
-    printf("ROTATION %3.2f degree on z and y axis EXAMPLE\n", rotationAngleDegree);
+    printf("ROTATION % 08.3f degree on z and y axis EXAMPLE\n", rotationAngleDegree);
     {
         Quaternion rotated_orientation;
         Quaternion_setIdentity(&rotated_orientation);   // The identity quaternion represents no rotation
@@ -139,7 +139,7 @@ int main(void)
 
         double axisAngle[3] = {0, 0, 0};
         double angle = Quaternion_toAxisAngle(&rotated_orientation_comb, axisAngle);
-        printf("Axis angle:   %.3f (%.3f, %.3f, %.3f)\n", angle,
+        printf("Axis angle:   % 08.3f (% 08.3f, % 08.3f, % 08.3f)\n", angle,
         axisAngle[0], axisAngle[1], axisAngle[2]);
 
         double position_rot[3] = {10, 0, 0};
@@ -154,7 +154,7 @@ int main(void)
     }
 
     rotationAngleDegree = 90.0;
-    printf("ROTATION %3.2f degree on x y and z axis EXAMPLE\n", rotationAngleDegree);
+    printf("ROTATION % 08.3f degree on x y and z axis EXAMPLE\n", rotationAngleDegree);
     {
         Quaternion rotated_orientation;
         Quaternion_setIdentity(&rotated_orientation);   // The identity quaternion represents no rotation
@@ -191,7 +191,7 @@ int main(void)
         
 /*         double axisAngle[3] = {0, 0, 0};
         double angle = Quaternion_toAxisAngle(&rotated_orientation_comb, axisAngle);
-        printf("Axis angle:   %.3f (%.3f, %.3f, %.3f)\n", angle,
+        printf("Axis angle:   % 08.3f (% 08.3f, % 08.3f, % 08.3f)\n", angle,
         axisAngle[0], axisAngle[1], axisAngle[2]); */
 
         double position_rot[3] = {10, 10, 10};
@@ -206,7 +206,7 @@ int main(void)
     }
 
     rotationAngleDegree = 45.0;
-    printf("ROTATION %3.2f degree on x y and z axis EXAMPLE AxisAngle\n", rotationAngleDegree);
+    printf("ROTATION % 08.3f degree on x y and z axis EXAMPLE AxisAngle\n", rotationAngleDegree);
     {
         Quaternion rotated_orientation;
         Quaternion_setIdentity(&rotated_orientation);   // The identity quaternion represents no rotation
@@ -219,7 +219,7 @@ int main(void)
 
         double axisAngle[3] = {0, 0, 0};
         double angle = Quaternion_toAxisAngle(&rotated_orientation, axisAngle);
-        printf("Axis angle:   %.3f (%.3f, %.3f, %.3f)\n", angle,
+        printf("Axis angle:   % 08.3f (% 08.3f, % 08.3f, % 08.3f)\n", angle,
         axisAngle[0], axisAngle[1], axisAngle[2]);
 
         double position_rot[3] = {10, 0, 0};
@@ -235,23 +235,72 @@ int main(void)
 
     printf("Hemisphere sensor layout EXAMPLE\n");
     {
+        double axisAngle[3] = {0, 0, 0};
+        Quaternion hemispher_sensors[14];
+        double angles[14][3];
+        for (size_t i = 0; i < sizeof(hemispher_sensors)/sizeof(hemispher_sensors[0]); i++)
+        {
+            Quaternion_setIdentity(&hemispher_sensors[i]);
+        }
+        
+        int idx = 0;
         for (size_t i = 0; i < 2; i++)
         {
             for (size_t j = 0; j < 8; j++)
             {
-                int m = (i > 0) ? (j / 2) : j;
-                double yaw =  45.0 * i / 180.0 * M_PI;
-                double pitch =  45.0 * m / 180.0 * M_PI;
-                double roll =  0.0 / 180.0 * M_PI;
-                printf("Quaternion_fromEulerZYX y: %.3f p: %.3f r: %.3f\t:\t", yaw, pitch, roll);
+                if (i> 0 && j % 2 == 0)
                 {
-                    double eulerAngles[3] = {yaw, pitch, roll};
+                    continue;
+                }
+                double yaw =  45.0 * i;
+                double pitch =  45.0 * j;
+                double roll =  0.0;
+                angles[idx][0] = yaw;
+                angles[idx][1] = pitch;
+                angles[idx][2] = roll;
+                
+                // printf("Quaternion_fromEulerZYX y: % 08.3f p: % 08.3f r: % 08.3f\t:\t", yaw, pitch, roll);
+                {
+                    double eulerAngles[3] = {yaw/ 180.0 * M_PI, pitch/ 180.0 * M_PI, roll/ 180.0 * M_PI};
                     Quaternion rotated_orientation;
                     Quaternion_fromEulerZYX(eulerAngles, &rotated_orientation);
-                    Quaternion_fprint(stdout, &rotated_orientation); printf("\n");
+                    
+                    hemispher_sensors[idx].v[0] = rotated_orientation.v[0];
+                    hemispher_sensors[idx].v[1] = rotated_orientation.v[1];
+                    hemispher_sensors[idx].v[2] = rotated_orientation.v[2];
+                    hemispher_sensors[idx].w = rotated_orientation.w;
+                    idx = idx +1;
+                    // Quaternion_fprint(stdout, &rotated_orientation); printf("\n");
                 }
             }
-            
+        }
+
+        double yaw =  90.0;
+        double pitch =  90.0;
+        double roll =  0.0;
+        angles[idx][0] = yaw;
+        angles[idx][1] = pitch;
+        angles[idx][2] = roll;
+
+        // printf("Quaternion_fromEulerZYX y: % 08.3f p: % 08.3f r: % 08.3f\t:\t", yaw, pitch, roll);
+        {
+            double eulerAngles[3] = {yaw/ 180.0 * M_PI, pitch/ 180.0 * M_PI, roll/ 180.0 * M_PI};
+            Quaternion rotated_orientation;
+            Quaternion_fromEulerZYX(eulerAngles, &rotated_orientation);
+            hemispher_sensors[idx].v[0] = rotated_orientation.v[0];
+            hemispher_sensors[idx].v[1] = rotated_orientation.v[1];
+            hemispher_sensors[idx].v[2] = rotated_orientation.v[2];
+            hemispher_sensors[idx].w = rotated_orientation.w;
+            idx = idx +1;
+            // Quaternion_fprint(stdout, &rotated_orientation); printf("\n");
+        }
+
+        double position_rot[3] = {1.0, 0, 0};
+        for (size_t i = 0; i < idx; i++)
+        {
+            // Quaternion_rotate(&hemispher_sensors[i], position_rot, position_rot);
+            printf("% 08.3f, % 08.3f, % 08.3f\t", angles[i][0], angles[i][1], angles[i][2]);
+            simplePrintState(position_rot, &hemispher_sensors[i]);
         }
         
     }

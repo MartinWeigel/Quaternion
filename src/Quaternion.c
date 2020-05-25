@@ -53,7 +53,7 @@ bool Quaternion_equal(Quaternion* q1, Quaternion* q2)
 
 void Quaternion_fprint(FILE* file, Quaternion* q)
 {
-    fprintf(file, "(%.3f, %.3f, %.3f, %.3f)",
+    fprintf(file, "(% 08.3f, % 08.3f, % 08.3f, % 08.3f)",
         q->w, q->v[0], q->v[1], q->v[2]);
 }
 
