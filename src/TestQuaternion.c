@@ -1,6 +1,6 @@
 // TEST: gcc -Wall -Wextra .\TestQuaternion.c .\Quaternion.c -o TestQuaternion.exe; .\TestQuaternion.exe
 #include <stdlib.h>
-#include "Quaternion.h"
+#include "../include/Quaternion.h"
 
 #define TO_RAD(x) (x / 180.0 * M_PI)
 

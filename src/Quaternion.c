@@ -17,7 +17,7 @@
  * @brief   A basic quaternion library written in C
  * @date    2019-11-28
  */
-#include "Quaternion.h"
+#include "../include/Quaternion.h"
 #include <stdlib.h>
 #include <assert.h>
 #include <math.h>
