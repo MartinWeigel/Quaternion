@@ -117,15 +117,15 @@ void Quaternion_fromEulerZYX(double eulerZYX[3], Quaternion* output)
     // Based on https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
     double cy = cos(eulerZYX[2] * 0.5);
     double sy = sin(eulerZYX[2] * 0.5);
-    double cr = cos(eulerZYX[0] * 0.5);
-    double sr = sin(eulerZYX[0] * 0.5);
     double cp = cos(eulerZYX[1] * 0.5);
     double sp = sin(eulerZYX[1] * 0.5);
+    double cr = cos(eulerZYX[0] * 0.5);
+    double sr = sin(eulerZYX[0] * 0.5);
 
-    output->w = cy * cr * cp + sy * sr * sp;
-    output->v[0] = cy * sr * cp - sy * cr * sp;
-    output->v[1] = cy * cr * sp + sy * sr * cp;
-    output->v[2] = sy * cr * cp - cy * sr * sp;
+    output->w = cr * cp * cy + sr * sp * sy;
+    output->v[0] = sr * cp * cy - cr * sp * sy;
+    output->v[1] = cr * sp * cy + sr * cp * sy;
+    output->v[2] = cr * cp * sy - sr * sp * cy;
 }
 
 void Quaternion_toEulerZYX(Quaternion* q, double output[3])
