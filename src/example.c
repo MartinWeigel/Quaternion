@@ -15,8 +15,7 @@
 // Version: 2018-12-22
 // Usage:   gcc -Wall -Wextra .\example.c .\Quaternion.c -o example.exe; .\example.exe
 
-
-
+#include <stdlib.h>
 #include "../include/example.h"
 
 void printState(double* position, Quaternion* orientation)
@@ -84,5 +83,5 @@ int main(void)
 
     printState(position, &orientation);
 
-    return 0;
+    return EXIT_SUCCESS;
 }

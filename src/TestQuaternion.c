@@ -329,5 +329,6 @@ int main(void)
     testQuaternion_multiply();
     testQuaternion_rotate();
     testQuaternion_slerp();
+    fprintf(stdout, "TEST Completed\n");
     return EXIT_SUCCESS;
 }
