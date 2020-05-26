@@ -337,11 +337,6 @@ void testQuaternion_combinedRotation(void)
     ASSERT_SAME_DOUBLE("Quaternion_combinedRotat rotated_orientation_comb (v[0])", resultQuaternion.v[0], rotated_orientation_comb.v[0]);
     ASSERT_SAME_DOUBLE("Quaternion_combinedRotat rotated_orientation_comb (v[1])", resultQuaternion.v[1], rotated_orientation_comb.v[1]);
     ASSERT_SAME_DOUBLE("Quaternion_combinedRotat rotated_orientation_comb (v[2])", resultQuaternion.v[2], rotated_orientation_comb.v[2]);
-/*     printf("rotated_orientation_comb\t"); Quaternion_fprint(stdout, &rotated_orientation_comb); printf("\n");
-    double axisAngle[3] = {0, 0, 0};
-    Quaternion_toEulerZYX(&rotated_orientation_comb, axisAngle);
-    printf("EulerZYX angle:  (% 08.3f°,% 08.3f°,% 08.3f°)\n",
-    axisAngle[0] * 180.0 / M_PI, axisAngle[1] * 180.0 / M_PI, axisAngle[2] * 180.0 / M_PI); */
 }
 
 void testQuaternion_slerp(void)
