@@ -291,6 +291,59 @@ void testQuaternion_rotate(void)
     ASSERT_SAME_DOUBLE("Quaternion_rotate example 4 (Z-axis)", result[2], 0);
 }
 
+void testQuaternion_combinedRotation(void)
+{
+    double result[3];
+    Quaternion resultQuaternion;
+    double roll_initial =  0.0;  // around x axis
+    double pitch_initial =  45.0;  // around y axis
+    double yaw_initial =  0.0;  // around z axis
+
+    double eulerAngles_initial[3] = {TO_RAD(roll_initial), TO_RAD(pitch_initial), TO_RAD(yaw_initial)};
+    Quaternion rotated_orientation_initial;
+    Quaternion_setIdentity(&rotated_orientation_initial);
+
+    Quaternion_fromEulerZYX(eulerAngles_initial, &rotated_orientation_initial);
+
+    Quaternion_set(0.9238795, 0, 0.3826834, 0, &resultQuaternion);
+    ASSERT_SAME_DOUBLE("Quaternion_combinedRotat rotated_orientation_initial (w)", resultQuaternion.w, rotated_orientation_initial.w);
+    ASSERT_SAME_DOUBLE("Quaternion_combinedRotat rotated_orientation_initial (v[0])", resultQuaternion.v[0], rotated_orientation_initial.v[0]);
+    ASSERT_SAME_DOUBLE("Quaternion_combinedRotat rotated_orientation_initial (v[1])", resultQuaternion.v[1], rotated_orientation_initial.v[1]);
+    ASSERT_SAME_DOUBLE("Quaternion_combinedRotat rotated_orientation_initial (v[2])", resultQuaternion.v[2], rotated_orientation_initial.v[2]);
+
+    double roll_after =  0.0;  // around x axis
+    double pitch_after =  0.0;  // around y axis
+    double yaw_after =  215.0;  // around z axis
+
+    double eulerAngles_after[3] = {TO_RAD(roll_after), TO_RAD(pitch_after), TO_RAD(yaw_after)};
+    Quaternion rotated_orientation_after;
+    Quaternion_setIdentity(&rotated_orientation_after);
+
+    Quaternion_fromEulerZYX(eulerAngles_after, &rotated_orientation_after);
+
+    Quaternion_set( -0.3007058, 0, 0, 0.953717, &resultQuaternion);
+    ASSERT_SAME_DOUBLE("Quaternion_combinedRotat rotated_orientation_after (w)", resultQuaternion.w, rotated_orientation_after.w);
+    ASSERT_SAME_DOUBLE("Quaternion_combinedRotat rotated_orientation_after (v[0])", resultQuaternion.v[0], rotated_orientation_after.v[0]);
+    ASSERT_SAME_DOUBLE("Quaternion_combinedRotat rotated_orientation_after (v[1])", resultQuaternion.v[1], rotated_orientation_after.v[1]);
+    ASSERT_SAME_DOUBLE("Quaternion_combinedRotat rotated_orientation_after (v[2])", resultQuaternion.v[2], rotated_orientation_after.v[2]);
+    
+    Quaternion rotated_orientation_comb;
+    Quaternion_setIdentity(&rotated_orientation_comb);
+
+    Quaternion_multiply(&rotated_orientation_after, &rotated_orientation_initial, &rotated_orientation_comb);
+    
+    Quaternion_set(-0.277816, -0.364972, -0.115075, 0.881120, &resultQuaternion);
+    ASSERT_SAME_DOUBLE("Quaternion_combinedRotat rotated_orientation_comb (w)", resultQuaternion.w, rotated_orientation_comb.w);
+    ASSERT_SAME_DOUBLE("Quaternion_combinedRotat rotated_orientation_comb (v[0])", resultQuaternion.v[0], rotated_orientation_comb.v[0]);
+    ASSERT_SAME_DOUBLE("Quaternion_combinedRotat rotated_orientation_comb (v[1])", resultQuaternion.v[1], rotated_orientation_comb.v[1]);
+    ASSERT_SAME_DOUBLE("Quaternion_combinedRotat rotated_orientation_comb (v[2])", resultQuaternion.v[2], rotated_orientation_comb.v[2]);
+/*     printf("rotated_orientation_comb\t"); Quaternion_fprint(stdout, &rotated_orientation_comb); printf("\n");
+    double axisAngle[3] = {0, 0, 0};
+    Quaternion_toEulerZYX(&rotated_orientation_comb, axisAngle);
+    printf("EulerZYX angle:  (% 08.3f°,% 08.3f°,% 08.3f°)\n",
+    axisAngle[0] * 180.0 / M_PI, axisAngle[1] * 180.0 / M_PI, axisAngle[2] * 180.0 / M_PI); */
+}
+
 void testQuaternion_slerp(void)
 {
     Quaternion q1, q2, result;
@@ -329,6 +382,7 @@ int main(void)
     testQuaternion_multiply();
     testQuaternion_rotate();
     testQuaternion_slerp();
-    fprintf(stdout, "TEST Completed\n");
+    testQuaternion_combinedRotation();
+    fprintf(stdout, "TEST Succesful\n");
     return EXIT_SUCCESS;
 }

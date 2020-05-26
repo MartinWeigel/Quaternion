@@ -149,9 +149,11 @@ int main(void)
 
     printf("--------------------------------------------------------------------------------\n");
     printf("Hemisphere sensor layout EXAMPLE\n");
-    {
-        Quaternion hemispher_sensors[14];
-        double angles[14][3];
+    {   
+        const int numberElements = 13;
+        Quaternion hemispher_sensors[numberElements];
+        double angles[numberElements][3];
+
         for (size_t i = 0; i < sizeof(hemispher_sensors)/sizeof(hemispher_sensors[0]); i++)
         {
             Quaternion_setIdentity(&hemispher_sensors[i]);
@@ -166,12 +168,14 @@ int main(void)
                 {
                     continue;
                 }
-                double yaw =  45.0 * i;
-                double pitch =  45.0 * j;
+
                 double roll =  0.0;
-                angles[idx][0] = yaw;
+                double pitch =  45.0 * i;
+                double yaw =  45.0 * j;
+
+                angles[idx][0] = roll;
                 angles[idx][1] = pitch;
-                angles[idx][2] = roll;
+                angles[idx][2] = yaw;
                 
                 {
                     double eulerAngles[3] = {yaw/ 180.0 * M_PI, pitch/ 180.0 * M_PI, roll/ 180.0 * M_PI};
@@ -187,12 +191,13 @@ int main(void)
             }
         }
 
-        double yaw =  90.0;
-        double pitch =  90.0;
         double roll =  0.0;
-        angles[idx][0] = yaw;
+        double pitch =  90.0;
+        double yaw =  90.0;
+
+        angles[idx][0] = roll;
         angles[idx][1] = pitch;
-        angles[idx][2] = roll;
+        angles[idx][2] = yaw;
 
         {
             double eulerAngles[3] = {yaw/ 180.0 * M_PI, pitch/ 180.0 * M_PI, roll/ 180.0 * M_PI};
@@ -206,6 +211,7 @@ int main(void)
         }
 
         double position_rot[3] = {1.0, 0, 0};
+        printf(" Roll(X)    Pitch(Y)   Yaw(Z)\t\tW\tX\tY\tZ\t\tX\tY\tZ\n");
         for (size_t i = 0; i < idx; i++)
         {
             printf("% 08.3f°, % 08.3f°, % 08.3f°\t", angles[i][0], angles[i][1], angles[i][2]);
