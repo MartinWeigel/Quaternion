@@ -90,7 +90,7 @@ int main(void)
         {
             Quaternion_rotate(&rotated_orientation, position_rot, position_rot);   // Calculate move in character coordinate system
 
-            printf("\t%u rotation\n\t\t", i);
+            printf("\t%lu rotation\n\t\t", i);
             simplePrintState(position_rot, &rotated_orientation);
         }
     }
@@ -118,7 +118,7 @@ int main(void)
         {
             Quaternion_rotate(&rotated_orientation, position_rot, position_rot);   // Calculate move in character coordinate system
 
-            printf("\t%u rotation\n\t\t", i);
+            printf("\t%lu rotation\n\t\t", i);
             simplePrintState(position_rot, &rotated_orientation);
         }
     }
@@ -146,7 +146,7 @@ int main(void)
         {
             Quaternion_rotate(&rotated_orientation, position_rot, position_rot);   // Calculate move in character coordinate system
 
-            printf("\t%u rotation\n\t\t", i);
+            printf("\t%lu rotation\n\t\t", i);
             simplePrintState(position_rot, &rotated_orientation);
         }
     }

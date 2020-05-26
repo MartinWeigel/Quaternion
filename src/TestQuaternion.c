@@ -1,6 +1,6 @@
 // TEST: gcc -Wall -Wextra .\TestQuaternion.c .\Quaternion.c -o TestQuaternion.exe; .\TestQuaternion.exe
 #include <stdlib.h>
-#include "../include/Quaternion.h"
+#include "../include/TestQuaternion.h"
 
 #define TO_RAD(x) (x / 180.0 * M_PI)
 
@@ -293,7 +293,6 @@ void testQuaternion_rotate(void)
 
 void testQuaternion_combinedRotation(void)
 {
-    double result[3];
     Quaternion resultQuaternion;
     double roll_initial =  0.0;  // around x axis
     double pitch_initial =  45.0;  // around y axis

@@ -1,41 +1,58 @@
 .DEFAULT_GOAL := all
 
+MAJOR := 0
+MINOR := 1
+NAME := Quaternion
+VERSION := $(MAJOR).$(MINOR)
+
 IDIR =../include
 CC=gcc
-CFLAGS=-I$(IDIR)
+CFLAGS=-I$(IDIR) -L${LDIR} -Wall
 
-ODIR=obj
+ODIR=../obj
 LDIR =../lib
 
 LIBS=-lm
+SHAREDLIBS = -l$(NAME)
 
 MKDIR_P = mkdir -p
-BINDIR = bin
+BINDIR =../bin
 
-_DEPS = example.h Quaternion.h
+LDFLAGS= -shared
+
+_DEPS = %.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ = example.o Quaternion.o
+_OBJ = %.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
-_TEST = TestQuaternion.o Quaternion.o
+_TEST = TestQuaternion.o
 TEST = $(patsubst %,$(ODIR)/%,$(_TEST))
 
 $(ODIR)/%.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-example: $(OBJ)
-	$(CC) -o ${BINDIR}/$@ $^ $(CFLAGS) $(LIBS)
+lib$(NAME).so.$(VERSION): ${ODIR}/$(NAME).o
+	$(CC) $^ -o ${LDIR}/$@ $(CFLAGS) $(LIBS) $(LDFLAGS) -Wl,-soname,lib$(NAME).so.$(MAJOR) 
+
+lib$(NAME).so: lib$(NAME).so.$(VERSION)
+	ldconfig -v -n ${LDIR}
+	ln -s ${LDIR}/lib$(NAME).so.$(MAJOR) ${LDIR}/lib$(NAME).so
+
+lib: lib$(NAME).so.$(VERSION)
+
+example: $(ODIR)/example.o
+	$(CC) $(CFLAGS) -Wl,-rpath=${LDIR} -o ${BINDIR}/$@ $^ $(LIBS) $(SHAREDLIBS) 
 
 test: $(TEST)
-	$(CC) -o ${BINDIR}/$@ $^ $(CFLAGS) $(LIBS)
+	$(CC) $(CFLAGS) -Wl,-rpath=${LDIR} -o ${BINDIR}/$@ $^ $(LIBS) $(SHAREDLIBS)
 	${BINDIR}/$@
 
-all: directories example test
+all: directories lib$(NAME).so example test
 
 .PHONY: clean directories
 
-directories: ${BINDIR} ${ODIR}
+directories: ${BINDIR} ${ODIR} ${LDIR}
 
 ${BINDIR}:
 	${MKDIR_P} ${BINDIR}
@@ -43,7 +60,11 @@ ${BINDIR}:
 ${ODIR}:
 	${MKDIR_P} ${ODIR}
 
+${LDIR}:
+	${MKDIR_P} ${LDIR}
+
 clean:
 	rm -f *~ $(INCDIR)/*~
 	rm -f $(ODIR)/*.o
+	rm -f $(LDIR)/*
 	rm -r ${BINDIR} $(ODIR)
