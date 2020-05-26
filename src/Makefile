@@ -24,6 +24,9 @@ LDFLAGS= -shared -Wl,-soname,lib$(NAME).so.$(MAJOR)
 _DEPS = %.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
+_OBJ = example.o
+OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
+
 _TEST = TestQuaternion.o
 TEST = $(patsubst %,$(ODIR)/%,$(_TEST))
 
@@ -39,7 +42,7 @@ lib$(NAME).so: lib$(NAME).so.$(VERSION)
 
 lib: lib$(NAME).so.$(VERSION)
 
-example: $(ODIR)/example.o
+example: $(OBJ)
 	$(CC) $(CFLAGS) -o ${BINDIR}/$@ $^ $(LIBS) $(SHAREDLIBS) 
 
 test: $(TEST)
@@ -62,8 +65,6 @@ ${LDIR}:
 	${MKDIR_P} ${LDIR}
 
 clean:
-	rm -f *~ $(INCDIR)/*~
-	rm -f *~ $(INCDIR)/*~
-	rm -f $(ODIR)/*.o
-	rm -f $(LDIR)/*
+	rm -f $(INCDIR)/*~ $(SDIR)/*~  && \
+	rm -f $(ODIR)/*.o $(LDIR)/*.so.* ${BINDIR}/* && \
 	rm -r ${BINDIR} $(ODIR) $(LDIR)

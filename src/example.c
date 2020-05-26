@@ -163,7 +163,7 @@ int main(void)
             Quaternion_setIdentity(&hemispher_sensors[i]);
         }
         
-        int idx = 0;
+        size_t idx = 0;
         for (size_t i = 0; i < 2; i++)
         {
             for (size_t j = 0; j < 8; j++)
