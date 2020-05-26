@@ -18,6 +18,8 @@
 #include <stdlib.h>
 #include "../include/example.h"
 
+#define TO_RAD(x) (x / 180.0 * M_PI)
+
 void printState(double* position, Quaternion* orientation)
 {
     // Output the curre
@@ -48,7 +50,7 @@ int main(void)
 
     // Rotate character to the left (90 degrees around z)
     Quaternion rotateLeft;
-    double angle = 90.0 / 180.0 * M_PI;             // Rotation angle in radians
+    double angle = TO_RAD(90.0);             // Rotation angle in radians
     Quaternion_fromZRotation(angle, &rotateLeft);   // Set rotateLeft to represent the Z-rotation
     Quaternion_fprint(stdout, &rotateLeft); printf("\n");
 
@@ -95,11 +97,12 @@ int main(void)
 
     printf("--------------------------------------------------------------------------------\n");
     {
-        double yaw_deg =  45.0;
-        double pitch_deg =  45.0;
         double roll_deg =  0.0;
-        printf("Quaternion_fromEulerZYX y: % 08.3f° p: % 08.3f° r: % 08.3f°:\n\t", yaw_deg, pitch_deg, roll_deg);
-        double eulerAngles[3] = {yaw_deg/ 180.0 * M_PI, pitch_deg/ 180.0 * M_PI, roll_deg/ 180.0 * M_PI};
+        double pitch_deg =  45.0;
+        double yaw_deg =  45.0;
+
+        printf("Quaternion_fromEulerZYX r: % 08.3f°  p: % 08.3f° y: % 08.3f°:\n\t", roll_deg, pitch_deg, yaw_deg);
+        double eulerAngles[3] = {TO_RAD(roll_deg), TO_RAD(pitch_deg), TO_RAD(yaw_deg)};
         Quaternion rotated_orientation;
         Quaternion_fromEulerZYX(eulerAngles, &rotated_orientation);
         printf("Quaternion_fromEulerZYX\t\t"); Quaternion_fprint(stdout, &rotated_orientation); printf("\n\t");
@@ -122,11 +125,12 @@ int main(void)
 
     printf("--------------------------------------------------------------------------------\n");
     {
-        double yaw_deg =  45.0;
-        double pitch_deg =  45.0;
         double roll_deg =  45.0;
-        printf("Quaternion_fromEulerZYX y: % 08.3f° p: % 08.3f° r: % 08.3f°:\n\t", yaw_deg, pitch_deg, roll_deg);
-        double eulerAngles[3] = {yaw_deg/ 180.0 * M_PI, pitch_deg/ 180.0 * M_PI, roll_deg/ 180.0 * M_PI};
+        double pitch_deg =  45.0;
+        double yaw_deg =  45.0;
+
+        printf("Quaternion_fromEulerZYX r: % 08.3f°  p: % 08.3f° y: % 08.3f°:\n\t", roll_deg, pitch_deg, yaw_deg);
+        double eulerAngles[3] = {TO_RAD(roll_deg), TO_RAD(pitch_deg), TO_RAD(yaw_deg)};
         Quaternion rotated_orientation;
         Quaternion_fromEulerZYX(eulerAngles, &rotated_orientation);
         printf("Quaternion_fromEulerZYX\t\t"); Quaternion_fprint(stdout, &rotated_orientation); printf("\n\t");
@@ -178,7 +182,7 @@ int main(void)
                 angles[idx][2] = yaw;
                 
                 {
-                    double eulerAngles[3] = {yaw/ 180.0 * M_PI, pitch/ 180.0 * M_PI, roll/ 180.0 * M_PI};
+                    double eulerAngles[3] = {TO_RAD(roll), TO_RAD(pitch), TO_RAD(yaw)};
                     Quaternion rotated_orientation;
                     Quaternion_fromEulerZYX(eulerAngles, &rotated_orientation);
                     
@@ -200,7 +204,7 @@ int main(void)
         angles[idx][2] = yaw;
 
         {
-            double eulerAngles[3] = {yaw/ 180.0 * M_PI, pitch/ 180.0 * M_PI, roll/ 180.0 * M_PI};
+            double eulerAngles[3] = {TO_RAD(roll), TO_RAD(pitch), TO_RAD(yaw)};
             Quaternion rotated_orientation;
             Quaternion_fromEulerZYX(eulerAngles, &rotated_orientation);
             hemispher_sensors[idx].v[0] = rotated_orientation.v[0];
