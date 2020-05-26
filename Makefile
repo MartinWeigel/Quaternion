@@ -5,19 +5,20 @@ MINOR := 1
 NAME := Quaternion
 VERSION := $(MAJOR).$(MINOR)
 
-SDIR =../src
-IDIR =../include
-CC=gcc
-CFLAGS=-I$(IDIR) -L${LDIR} -Wall -Werror -fpic
+BDIR = build
+SDIR = src
+IDIR = include
+CC = gcc
+CFLAGS = -I$(IDIR) -L${LDIR}/ -Wall -Werror -fpic
 
-ODIR=../obj
-LDIR =../lib
+ODIR = $(BDIR)/obj
+LDIR = $(BDIR)/lib
 
 LIBS=-lm
 SHAREDLIBS = -l$(NAME)
 
 MKDIR_P = mkdir -p
-BINDIR =../bin
+BINDIR = $(BDIR)/bin
 
 LDFLAGS= -shared -Wl,-soname,lib$(NAME).so.$(MAJOR)
 
@@ -37,8 +38,8 @@ lib$(NAME).so.$(VERSION): ${ODIR}/$(NAME).o
 	$(CC) $^ -o ${LDIR}/$@ $(CFLAGS) $(LIBS) $(LDFLAGS) 
 
 lib$(NAME).so: lib$(NAME).so.$(VERSION)
-	ldconfig -v -n ${LDIR} && \
-	ln -s ${LDIR}/lib$(NAME).so.$(MAJOR) ${LDIR}/lib$(NAME).so
+	ldconfig -n ${LDIR} && \
+	ln -s ./${build}/lib$(NAME).so.$(MAJOR) ${LDIR}/lib$(NAME).so
 
 lib: lib$(NAME).so.$(VERSION)
 
@@ -67,4 +68,4 @@ ${LDIR}:
 clean:
 	rm -f $(INCDIR)/*~ $(SDIR)/*~  && \
 	rm -f $(ODIR)/*.o $(LDIR)/*.so.* ${BINDIR}/* && \
-	rm -r ${BINDIR} $(ODIR) $(LDIR)
+	rm -r ${BINDIR} $(ODIR) $(LDIR) $(BDIR)
