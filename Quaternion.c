@@ -1,4 +1,4 @@
-// Copyright (C) 2019 Martin Weigel <mail@MartinWeigel.com>
+// Copyright (C) 2022 Martin Weigel <mail@MartinWeigel.com>
 //
 // Permission to use, copy, modify, and/or distribute this software for any
 // purpose with or without fee is hereby granted, provided that the above
@@ -15,7 +15,7 @@
 /**
  * @file    Quaternion.c
  * @brief   A basic quaternion library written in C
- * @date    2019-11-28
+ * @date    2022-04-24
  */
 #include "Quaternion.h"
 #include <stdlib.h>
@@ -242,7 +242,7 @@ void Quaternion_slerp(Quaternion* q1, Quaternion* q2, double t, Quaternion* outp
     double cosHalfTheta = q1->w*q2->w + q1->v[0]*q2->v[0] + q1->v[1]*q2->v[1] + q1->v[2]*q2->v[2];
 
     // if q1=q2 or qa=-q2 then theta = 0 and we can return qa
-    if (abs(cosHalfTheta) >= 1.0) {
+    if (fabs(cosHalfTheta) >= 1.0) {
         Quaternion_copy(q1, output);
         return;
     }
@@ -256,15 +256,14 @@ void Quaternion_slerp(Quaternion* q1, Quaternion* q2, double t, Quaternion* outp
         result.v[0] = (q1->v[0] * 0.5 + q2->v[0] * 0.5);
         result.v[1] = (q1->v[1] * 0.5 + q2->v[1] * 0.5);
         result.v[2] = (q1->v[2] * 0.5 + q2->v[2] * 0.5);
+    } else {
+        // Default quaternion calculation
+        double ratioA = sin((1 - t) * halfTheta) / sinHalfTheta;
+        double ratioB = sin(t * halfTheta) / sinHalfTheta;
+        result.w = (q1->w * ratioA + q2->w * ratioB);
+        result.v[0] = (q1->v[0] * ratioA + q2->v[0] * ratioB);
+        result.v[1] = (q1->v[1] * ratioA + q2->v[1] * ratioB);
+        result.v[2] = (q1->v[2] * ratioA + q2->v[2] * ratioB);
     }
-
-    // Calculate Quaternion
-    double ratioA = sin((1 - t) * halfTheta) / sinHalfTheta;
-    double ratioB = sin(t * halfTheta) / sinHalfTheta;
-    result.w = (q1->w * ratioA + q2->w * ratioB);
-    result.v[0] = (q1->v[0] * ratioA + q2->v[0] * ratioB);
-    result.v[1] = (q1->v[1] * ratioA + q2->v[1] * ratioB);
-    result.v[2] = (q1->v[2] * ratioA + q2->v[2] * ratioB);
-
     *output = result;
 }

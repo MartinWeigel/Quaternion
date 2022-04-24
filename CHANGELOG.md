@@ -1,5 +1,11 @@
 # Changelog
 
+## 2022-04-24
+### Fixed
+- `Quaternion_slerp` needs else-block to avoid wrong calculations when theta = 180
+- `Quaternion_slerp` uses fabs instead of abs
+
+
 ## 2019-11-28
 ### Added
 - Doxygen support
