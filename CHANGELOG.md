@@ -1,5 +1,9 @@
 # Changelog
 
+## 2022-05-16
+### Fixed
+- Defines `M_PI` if not defined by the compiler
+
 ## 2022-04-24
 ### Fixed
 - `Quaternion_slerp` needs else-block to avoid wrong calculations when theta = 180

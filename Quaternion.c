@@ -15,12 +15,16 @@
 /**
  * @file    Quaternion.c
  * @brief   A basic quaternion library written in C
- * @date    2022-04-24
+ * @date    2022-05-16
  */
 #include "Quaternion.h"
 #include <stdlib.h>
 #include <assert.h>
 #include <math.h>
+
+#ifndef M_PI
+    #define M_PI (3.14159265358979323846)
+#endif
 
 void Quaternion_set(double w, double v1, double v2, double v3, Quaternion* output)
 {

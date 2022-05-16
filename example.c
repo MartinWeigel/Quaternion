@@ -1,4 +1,4 @@
-// Copyright (C) 2018 Martin Weigel <mail@MartinWeigel.com>
+// Copyright (C) 2022 Martin Weigel <mail@MartinWeigel.com>
 //
 // Permission to use, copy, modify, and/or distribute this software for any
 // purpose with or without fee is hereby granted, provided that the above
@@ -12,11 +12,15 @@
 // ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 // OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-// Version: 2018-12-22
-// Usage:   gcc -Wall -Wextra .\example.c .\Quaternion.c -o example.exe; .\example.exe
+// Version: 2022-05-16
+// Usage:   gcc -std=c17 -Wall -Wextra example.c Quaternion.c -o example.exe; ./example.exe
 
 #include <stdlib.h>
 #include "Quaternion.h"
+
+#ifndef M_PI
+    #define M_PI (3.14159265358979323846)
+#endif
 
 void printState(double* position, Quaternion* orientation)
 {

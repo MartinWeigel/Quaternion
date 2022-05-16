@@ -1,7 +1,10 @@
-// TEST: gcc -Wall -Wextra .\TestQuaternion.c .\Quaternion.c -o TestQuaternion.exe; .\TestQuaternion.exe
+// TEST: gcc -std=c17 -Wall -Wextra TestQuaternion.c Quaternion.c -o TestQuaternion.exe; ./TestQuaternion.exe
 #include <stdlib.h>
 #include "Quaternion.h"
 
+#ifndef M_PI
+    #define M_PI (3.14159265358979323846)
+#endif
 #define TO_RAD(x) (x / 180.0 * M_PI)
 
 void ASSERT_SAME_DOUBLE(char* description, double x, double y)
